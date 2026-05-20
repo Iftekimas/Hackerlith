@@ -12,6 +12,26 @@ public class Amenaza {
         this.tipo = tipo;
     }
 
+    public void mover(Tablero tablero) {
+        int[] dFilas = { -1, 1, 0, 0 };
+        int[] dColumnas = { 0, 0, -1, 1 };
+
+        if (tipo.equals("FIREWALL"))
+            return;
+
+        int dir = (int) (Math.random() * 4);
+        int nuevaFila = fila + dFilas[dir];
+        int nuevaColumna = columna + dColumnas[dir];
+
+        if (tablero.estaEnRango(nuevaFila, nuevaColumna)
+                && tablero.getCelda(nuevaFila, nuevaColumna).equals("VACIO")) {
+            tablero.setCelda(fila, columna, "VACIO");
+            fila = nuevaFila;
+            columna = nuevaColumna;
+            tablero.setCelda(fila, columna, tipo);
+        }
+    }
+
     public int getFila() {
         return fila;
     }
