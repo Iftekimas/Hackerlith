@@ -77,11 +77,18 @@ public class Controlador {
             }
 
         }
-
+        // Mover al jugador
         juego.getJugador().setFila(nuevaFila);
         juego.getJugador().setColumna(nuevaColumna);
+        // Reducir movimientos restantes
         juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - 1);
+        // Verificar encuentros con amenazas
         verificarEncuentros();
+
+        // Si el jugador estaba en modo sigilo, salir de ese modo al moverse
+        if (juego.getJugador().isModoSigilo()) {
+            juego.getJugador().setModoSigilo(false);
+        }
         juego.verificarVictoria();
         juego.verificarDerrota();
         if (!juego.getEstado().equals(Juego.JUGANDO)) {

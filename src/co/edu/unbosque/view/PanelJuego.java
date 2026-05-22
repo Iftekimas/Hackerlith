@@ -99,6 +99,7 @@ public class PanelJuego extends JPanel {
         g.setColor(Color.WHITE);
         g.drawRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
 
+        // Dibujar rastro del paquete
         int[][] rastro = juego.getPaquete().getRastro();
         int cantidad = juego.getPaquete().getCantidadRastro();
 
@@ -114,11 +115,17 @@ public class PanelJuego extends JPanel {
         g.drawString("Movimientos: " + juego.getJugador().getMovimientosRestantes(), 10,
                 juego.getTablero().getFilas() * tamCelda + 20);
 
+        // Mostrar el próximo puerto objetivo
         int siguiente = juego.getPaquete().getPuertosVisitados() + 1;
         if (siguiente <= juego.getPuertos().length) {
             g.drawString("Puerto objetivo: P" + siguiente, 250, juego.getTablero().getFilas() * tamCelda + 20);
         } else {
             g.drawString("¡Todos los puertos visitados!", 250, juego.getTablero().getFilas() * tamCelda + 20);
+        }
+
+        if (juego.getJugador().isModoSigilo()) {
+            g.setColor(Color.CYAN);
+            g.drawString("MODO SIGILO ACTIVO", 10, juego.getTablero().getFilas() * tamCelda + 40);
         }
 
         // mensaje de fin de juego
