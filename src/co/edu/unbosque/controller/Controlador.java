@@ -7,8 +7,10 @@ public class Controlador {
     private Juego juego;
 
     public Controlador() {
-        juego = new Juego(8, 8, 3, 64);
-        // filas - columnas - numPuertos - movimientosMax
+        // Configuración inicial del juego: tablero de 8x8, 3 amenazas, 64 movimientos,
+        juego = new Juego(8, 8, 3, 64, false);
+        juego.inicializar();
+
     }
 
     public Juego getJuego() {

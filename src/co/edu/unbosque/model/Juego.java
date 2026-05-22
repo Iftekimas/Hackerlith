@@ -1,27 +1,64 @@
 package co.edu.unbosque.model;
 
 public class Juego {
-
     public static final String JUGANDO = "JUGANDO";
     public static final String GANADO = "GANADO";
     public static final String PERDIDO = "PERDIDO";
 
     private Tablero tablero;
-    private String estado;
     private Jugador jugador;
-    private Amenaza[] amenazas;
+    private PaqueteDatos paquete;
     private Puerto[] puertos;
-    private Archivo[] archivos;
+    private Amenaza[] amenazas;
+    private NodoEnergia[] nodos;
+    private String estado;
+    private int movimientosMax;
+    private boolean ordenInverso;
 
-    public Juego(int filas, int columnas, int numPuertos, int movimientosMax) {
+    // Constructor del juego
+    public Juego(int filas, int columnas, int numPuertos, int movimientosMax, boolean ordenInverso) {
+        this.movimientosMax = movimientosMax;
+        this.ordenInverso = ordenInverso;
+        this.estado = JUGANDO;
         this.tablero = new Tablero(filas, columnas);
         this.jugador = new Jugador(0, 0, movimientosMax);
-        this.archivos = new Archivo[numPuertos];
+        this.paquete = new PaqueteDatos(1, 1);
         this.puertos = new Puerto[numPuertos];
         this.amenazas = new Amenaza[0];
-        this.estado = JUGANDO;
+        this.nodos = new NodoEnergia[0];
     }
 
+    // Verifica si el jugador ha ganado
+    public boolean verificarVictoria() {
+        if (paquete.getPuertosVisitados() >= puertos.length) {
+            estado = GANADO;
+            return true;
+        }
+        return false;
+    }
+
+    // Verifica si el jugador ha perdido
+    public boolean verificarDerrota() {
+        // Verificar colisión con amenazas
+        if (jugador.getMovimientosRestantes() <= 0) {
+            estado = PERDIDO;
+            return true;
+        }
+        return false;
+    }
+
+    // Mueve las amenazas
+    public void moverAmenazas() {
+        for (int i = 0; i < amenazas.length; i++) {
+
+            if (amenazas[i] != null)
+                amenazas[i].mover(tablero);
+
+        }
+
+    }
+
+    // setters y getters
     public Tablero getTablero() {
         return tablero;
     }
@@ -30,8 +67,8 @@ public class Juego {
         return jugador;
     }
 
-    public Archivo[] getArchivos() {
-        return archivos;
+    public PaqueteDatos getPaquete() {
+        return paquete;
     }
 
     public Puerto[] getPuertos() {
@@ -42,8 +79,20 @@ public class Juego {
         return amenazas;
     }
 
+    public NodoEnergia[] getNodos() {
+        return nodos;
+    }
+
     public String getEstado() {
         return estado;
+    }
+
+    public int getMovimientosMax() {
+        return movimientosMax;
+    }
+
+    public boolean isOrdenInverso() {
+        return ordenInverso;
     }
 
     public void setEstado(String estado) {
@@ -54,27 +103,27 @@ public class Juego {
         this.amenazas = amenazas;
     }
 
-    public boolean verificarVictoria() {
-        for (int i = 0; i < archivos.length; i++) {
-            if (archivos[i] == null || !archivos[i].isEntregado())
-                return false;
-        }
-        estado = GANADO;
-        return true;
+    public void setPuertos(Puerto[] puertos) {
+        this.puertos = puertos;
     }
 
-    public boolean verificarDerrota() {
-        if (jugador.getMovimientosRestantes() <= 0) {
-            estado = PERDIDO;
-            return true;
-        }
-        return false;
+    public void setNodos(NodoEnergia[] nodos) {
+        this.nodos = nodos;
     }
 
-    public void moverAmenazas() {
-        for (int i = 0; i < amenazas.length; i++) {
-            if (amenazas[i] != null)
-                amenazas[i].mover(tablero);
-        }
+    // iniciliza el juego
+    public void inicializar() {
+
+        // Agregar puertos
+        puertos[0] = new Puerto(1, 6, 1);
+        puertos[1] = new Puerto(4, 2, 2);
+        puertos[2] = new Puerto(6, 6, 3);
+
+        paquete = new PaqueteDatos(3, 3);
+        tablero.setCelda(3, 3, "PAQUETE");
+
+        for (Puerto p : puertos)
+            tablero.setCelda(p.getFila(), p.getColumna(), "PUERTO");
     }
+
 }
