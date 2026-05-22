@@ -61,8 +61,11 @@ public class Controlador {
             juego.getPaquete().setColumna(paqNuevaColumna);
             juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
 
+            // Verificar si el paquete ha llegado a un puerto
             for (Puerto p : juego.getPuertos()) {
-                if (p.getFila() == paqNuevaFila && p.getColumna() == paqNuevaColumna && !p.isVisitado()) {
+                if (p.getFila() == paqNuevaFila && p.getColumna() == paqNuevaColumna
+                        && !p.isVisitado()
+                        && p.getNumero() == juego.getPaquete().getPuertosVisitados() + 1) {
                     p.setVisitado(true);
                     juego.getPaquete().visitarPuerto();
                     juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
@@ -75,10 +78,38 @@ public class Controlador {
         juego.getJugador().setFila(nuevaFila);
         juego.getJugador().setColumna(nuevaColumna);
         juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - 1);
-
+        verificarEncuentros();
         juego.verificarVictoria();
         juego.verificarDerrota();
         juego.moverAmenazas();
 
+    }
+
+    private void verificarEncuentros() {
+        int jf = juego.getJugador().getFila();
+        int jc = juego.getJugador().getColumna();
+
+        for (Amenaza a : juego.getAmenazas()) {
+            if (a == null)
+                continue;
+
+            boolean adyacente = (Math.abs(a.getFila() - jf) + Math.abs(a.getColumna() - jc)) == 1;
+
+            if (adyacente) {
+                if (a.getTipo().equals("ANTIVIRUS")) {
+                    if (juego.getJugador().isModoSigilo()) {
+                        juego.getJugador().setModoSigilo(false);
+                    } else {
+                        juego.setEstado(Juego.PERDIDO);
+                    }
+                } else if (a.getTipo().equals("ESCANER")) {
+                    int reduccion = (int) (juego.getJugador().getMovimientosRestantes() * 0.05);
+                    if (reduccion < 1)
+                        reduccion = 1;
+                    juego.getJugador()
+                            .setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - reduccion);
+                }
+            }
+        }
     }
 }
