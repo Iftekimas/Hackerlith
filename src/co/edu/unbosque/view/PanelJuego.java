@@ -86,6 +86,11 @@ public class PanelJuego extends JPanel {
 
                 } else if (celda.equals("ESCANER")) {
                     g.drawImage(imgEscaner, x, y, tamCelda, tamCelda, null);
+                } else if (celda.equals("NODO")) {
+                    g.setColor(Color.ORANGE);
+                    g.fillOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
+                    g.setColor(Color.YELLOW);
+                    g.drawOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
                 }
             }
         }
@@ -123,6 +128,7 @@ public class PanelJuego extends JPanel {
             g.drawString("¡Todos los puertos visitados!", 250, juego.getTablero().getFilas() * tamCelda + 20);
         }
 
+        // Indicar si el jugador está en modo sigilo
         if (juego.getJugador().isModoSigilo()) {
             g.setColor(Color.CYAN);
             g.drawString("MODO SIGILO ACTIVO", 10, juego.getTablero().getFilas() * tamCelda + 40);

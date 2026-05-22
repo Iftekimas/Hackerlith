@@ -80,6 +80,7 @@ public class Controlador {
         // Mover al jugador
         juego.getJugador().setFila(nuevaFila);
         juego.getJugador().setColumna(nuevaColumna);
+        verificarNodos();
         // Reducir movimientos restantes
         juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - 1);
         // Verificar encuentros con amenazas
@@ -137,6 +138,21 @@ public class Controlador {
             fw.close();
         } catch (Exception e) {
             System.out.println("Error al guardar log: " + e.getMessage());
+        }
+    }
+
+    private void verificarNodos() {
+        int jf = juego.getJugador().getFila();
+        int jc = juego.getJugador().getColumna();
+        for (NodoEnergia n : juego.getNodos()) {
+            if (n.getFila() == jf && n.getColumna() == jc) {
+                int bonus = (int) (juego.getMovimientosMax() * 0.10);
+                if (bonus < 1)
+                    bonus = 1;
+                juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() + bonus);
+                n.setActivo(false);
+                juego.getTablero().setCelda(jf, jc, "VACIO");
+            }
         }
     }
 
