@@ -99,9 +99,25 @@ public class PanelJuego extends JPanel {
         g.setColor(Color.WHITE);
         g.drawRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
 
+        // mensaje de fin de juego
+        if (juego.getEstado().equals(Juego.GANADO)) {
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.GREEN);
+            g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 36));
+            g.drawString("¡MISION COMPLETADA!", 80, getHeight() / 2);
+        } else if (juego.getEstado().equals(Juego.PERDIDO)) {
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.RED);
+            g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 36));
+            g.drawString("MISION FALLIDA", 120, getHeight() / 2);
+        }
+
     }
 
     public void actualizar() {
         repaint();
     }
+
 }

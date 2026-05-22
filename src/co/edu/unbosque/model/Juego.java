@@ -119,6 +119,14 @@ public class Juego {
         puertos[1] = new Puerto(4, 2, 2);
         puertos[2] = new Puerto(6, 6, 3);
 
+        // Amenazas
+
+        amenazas = new Amenaza[2];
+        amenazas[0] = new Amenaza(2, 2, "ANTIVIRUS");
+        amenazas[1] = new Amenaza(5, 5, "ESCANER");
+        tablero.setCelda(2, 2, "ANTIVIRUS");
+        tablero.setCelda(5, 5, "ESCANER");
+
         paquete = new PaqueteDatos(3, 3);
         tablero.setCelda(3, 3, "PAQUETE");
 
