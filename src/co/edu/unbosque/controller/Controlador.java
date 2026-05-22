@@ -56,6 +56,9 @@ public class Controlador {
             if (juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("FIREWALL"))
                 return; // No mover si el paquete choca con un firewall
 
+            juego.getPaquete().agregarRastro(nuevaFila, nuevaColumna);
+
+            // Mover el paquete
             juego.getTablero().setCelda(nuevaFila, nuevaColumna, "VACIO");
             juego.getPaquete().setFila(paqNuevaFila);
             juego.getPaquete().setColumna(paqNuevaColumna);
@@ -74,13 +77,25 @@ public class Controlador {
             }
 
         }
-
+        // Mover al jugador
         juego.getJugador().setFila(nuevaFila);
         juego.getJugador().setColumna(nuevaColumna);
+        verificarNodos();
+        // Reducir movimientos restantes
         juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - 1);
+        // Verificar encuentros con amenazas
         verificarEncuentros();
+
+        // Si el jugador estaba en modo sigilo, salir de ese modo al moverse
+        if (juego.getJugador().isModoSigilo()) {
+            juego.getJugador().setModoSigilo(false);
+        }
         juego.verificarVictoria();
         juego.verificarDerrota();
+        if (!juego.getEstado().equals(Juego.JUGANDO)) {
+            guardarLog();
+        }
+
         juego.moverAmenazas();
 
     }
@@ -112,4 +127,33 @@ public class Controlador {
             }
         }
     }
+
+    public void guardarLog() {
+        try {
+            java.io.FileWriter fw = new java.io.FileWriter("log_partida.txt");
+            fw.write("=== LOG DE PARTIDA HACKERLITH ===\n");
+            fw.write("Estado final: " + juego.getEstado() + "\n");
+            fw.write("Movimientos restantes: " + juego.getJugador().getMovimientosRestantes() + "\n");
+            fw.write("Puertos visitados: " + juego.getPaquete().getPuertosVisitados() + "\n");
+            fw.close();
+        } catch (Exception e) {
+            System.out.println("Error al guardar log: " + e.getMessage());
+        }
+    }
+
+    private void verificarNodos() {
+        int jf = juego.getJugador().getFila();
+        int jc = juego.getJugador().getColumna();
+        for (NodoEnergia n : juego.getNodos()) {
+            if (n.getFila() == jf && n.getColumna() == jc) {
+                int bonus = (int) (juego.getMovimientosMax() * 0.10);
+                if (bonus < 1)
+                    bonus = 1;
+                juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() + bonus);
+                n.setActivo(false);
+                juego.getTablero().setCelda(jf, jc, "VACIO");
+            }
+        }
+    }
+
 }

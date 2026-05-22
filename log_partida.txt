@@ -1,0 +1,4 @@
+=== LOG DE PARTIDA HACKERLITH ===
+Estado final: PERDIDO
+Movimientos restantes: 0
+Puertos visitados: 0

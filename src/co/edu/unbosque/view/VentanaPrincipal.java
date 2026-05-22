@@ -19,7 +19,7 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal(Controlador controlador) {
         setTitle("Hackerlith");
-        setSize(800, 600);
+        setSize(800, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -69,7 +69,10 @@ public class VentanaPrincipal extends JFrame {
                 String tecla = "";
                 if (code == KeyEvent.VK_W)
                     tecla = "W";
-                else if (code == KeyEvent.VK_S)
+                else if (code == KeyEvent.VK_E) {
+                    controlador.getJuego().getJugador().setModoSigilo(true);
+                    panelJuego.actualizar();
+                } else if (code == KeyEvent.VK_S)
                     tecla = "S";
                 else if (code == KeyEvent.VK_A)
                     tecla = "A";

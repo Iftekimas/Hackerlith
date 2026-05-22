@@ -114,6 +114,12 @@ public class Juego {
     // iniciliza el juego
     public void inicializar() {
 
+        nodos = new NodoEnergia[2];
+        nodos[0] = new NodoEnergia(3, 6);
+        nodos[1] = new NodoEnergia(6, 3);
+        tablero.setCelda(3, 6, "NODO");
+        tablero.setCelda(6, 3, "NODO");
+
         // Agregar puertos
         puertos[0] = new Puerto(1, 6, 1);
         puertos[1] = new Puerto(4, 2, 2);

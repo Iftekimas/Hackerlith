@@ -86,6 +86,11 @@ public class PanelJuego extends JPanel {
 
                 } else if (celda.equals("ESCANER")) {
                     g.drawImage(imgEscaner, x, y, tamCelda, tamCelda, null);
+                } else if (celda.equals("NODO")) {
+                    g.setColor(Color.ORANGE);
+                    g.fillOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
+                    g.setColor(Color.YELLOW);
+                    g.drawOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
                 }
             }
         }
@@ -98,6 +103,36 @@ public class PanelJuego extends JPanel {
         g.fillRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
         g.setColor(Color.WHITE);
         g.drawRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
+
+        // Dibujar rastro del paquete
+        int[][] rastro = juego.getPaquete().getRastro();
+        int cantidad = juego.getPaquete().getCantidadRastro();
+
+        for (int r = 0; r < cantidad; r++) {
+            int rx = rastro[r][1] * tamCelda + 15;
+            int ry = rastro[r][0] * tamCelda + 15;
+            g.setColor(new Color(255, 255, 0, 80));
+            g.fillOval(rx, ry, tamCelda - 30, tamCelda - 30);
+        }
+        // HUD
+        g.setColor(Color.WHITE);
+        g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 16));
+        g.drawString("Movimientos: " + juego.getJugador().getMovimientosRestantes(), 10,
+                juego.getTablero().getFilas() * tamCelda + 20);
+
+        // Mostrar el próximo puerto objetivo
+        int siguiente = juego.getPaquete().getPuertosVisitados() + 1;
+        if (siguiente <= juego.getPuertos().length) {
+            g.drawString("Puerto objetivo: P" + siguiente, 250, juego.getTablero().getFilas() * tamCelda + 20);
+        } else {
+            g.drawString("¡Todos los puertos visitados!", 250, juego.getTablero().getFilas() * tamCelda + 20);
+        }
+
+        // Indicar si el jugador está en modo sigilo
+        if (juego.getJugador().isModoSigilo()) {
+            g.setColor(Color.CYAN);
+            g.drawString("MODO SIGILO ACTIVO", 10, juego.getTablero().getFilas() * tamCelda + 40);
+        }
 
         // mensaje de fin de juego
         if (juego.getEstado().equals(Juego.GANADO)) {
@@ -113,7 +148,6 @@ public class PanelJuego extends JPanel {
             g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 36));
             g.drawString("MISION FALLIDA", 120, getHeight() / 2);
         }
-
     }
 
     public void actualizar() {
