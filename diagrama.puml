@@ -1,0 +1,101 @@
+@startuml Hackerlith
+
+package "model" {
+  class Juego {
+    - tablero: Tablero
+    - jugador: Jugador
+    - paquete: PaqueteDatos
+    - puertos: Puerto[]
+    - amenazas: Amenaza[]
+    - nodos: NodoEnergia[]
+    - estado: String
+    - movimientosMax: int
+    - ordenInverso: boolean
+    + verificarVictoria(): boolean
+    + verificarDerrota(): boolean
+    + moverAmenazas(): void
+    + verificarEncuentros(): void
+  }
+
+  class Tablero {
+    - celdas: String[][]
+    - filas: int
+    - columnas: int
+    + getCelda(f: int, c: int): String
+    + setCelda(f: int, c: int, valor: String): void
+    + estaEnRango(f: int, c: int): boolean
+    + getFilas(): int
+    + getColumnas(): int
+  }
+
+  class Jugador {
+    - fila: int
+    - columna: int
+    - movimientosRestantes: int
+    - modoSigilo: boolean
+  }
+
+  class PaqueteDatos {
+    - fila: int
+    - columna: int
+    - puertosVisitados: int
+  }
+
+  class Puerto {
+    - fila: int
+    - columna: int
+    - numero: int
+    - visitado: boolean
+  }
+
+  class Amenaza {
+    - fila: int
+    - columna: int
+    - tipo: String
+    + mover(tablero: Tablero): void
+  }
+
+  class NodoEnergia {
+    - fila: int
+    - columna: int
+    - activo: boolean
+  }
+}
+
+package "view" {
+  class VentanaPrincipal {
+    - panelJuego: PanelJuego
+    + mostrarPantalla(nombre: String): void
+    + getPanelJuego(): PanelJuego
+  }
+
+  class PanelJuego {
+    - juego: Juego
+    - tamCelda: int
+    + paintComponent(g: Graphics): void
+    + actualizar(): void
+  }
+}
+
+package "controller" {
+  class Controlador {
+    - juego: Juego
+    - ventana: VentanaPrincipal
+    + moverJugador(direccion: String): void
+    + iniciarJuego(): void
+    + guardarLog(): void
+  }
+}
+
+Juego *-- Tablero
+Juego *-- Jugador
+Juego *-- PaqueteDatos
+Juego *-- Puerto
+Juego *-- Amenaza
+Juego *-- NodoEnergia
+VentanaPrincipal *-- PanelJuego
+PanelJuego --> Juego
+Controlador --> Juego
+Controlador --> VentanaPrincipal
+
+@enduml
