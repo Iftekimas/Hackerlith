@@ -24,16 +24,26 @@ public class PanelJuego extends JPanel {
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
+                String celda = juego.getTablero().getCelda(i, j);
+                if (celda.equals("FIREWALL")) {
+                    g.setColor(Color.GRAY);
+                    g.fillRect(j * tamCelda, i * tamCelda, tamCelda, tamCelda);
+                } else if (celda.equals("PUERTO")) {
+                    g.setColor(Color.CYAN);
+                    g.fillRect(j * tamCelda, i * tamCelda, tamCelda, tamCelda);
+                } else if (celda.equals("PAQUETE")) {
+                    g.setColor(Color.YELLOW);
+                    g.fillRect(j * tamCelda, i * tamCelda, tamCelda, tamCelda);
+                }
                 g.setColor(Color.DARK_GRAY);
                 g.drawRect(j * tamCelda, i * tamCelda, tamCelda, tamCelda);
             }
         }
 
-        // jugador
         g.setColor(Color.GREEN);
         int jf = juego.getJugador().getFila();
         int jc = juego.getJugador().getColumna();
-        g.fillOval(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
+        g.fillOval(jc * tamCelda + 10, jf * tamCelda + 10, tamCelda - 20, tamCelda - 20);
     }
 
     public void actualizar() {
