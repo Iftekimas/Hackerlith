@@ -56,6 +56,9 @@ public class Controlador {
             if (juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("FIREWALL"))
                 return; // No mover si el paquete choca con un firewall
 
+            juego.getPaquete().agregarRastro(nuevaFila, nuevaColumna);
+
+            // Mover el paquete
             juego.getTablero().setCelda(nuevaFila, nuevaColumna, "VACIO");
             juego.getPaquete().setFila(paqNuevaFila);
             juego.getPaquete().setColumna(paqNuevaColumna);
@@ -81,6 +84,10 @@ public class Controlador {
         verificarEncuentros();
         juego.verificarVictoria();
         juego.verificarDerrota();
+        if (!juego.getEstado().equals(Juego.JUGANDO)) {
+            guardarLog();
+        }
+
         juego.moverAmenazas();
 
     }
@@ -112,4 +119,18 @@ public class Controlador {
             }
         }
     }
+
+    public void guardarLog() {
+        try {
+            java.io.FileWriter fw = new java.io.FileWriter("log_partida.txt");
+            fw.write("=== LOG DE PARTIDA HACKERLITH ===\n");
+            fw.write("Estado final: " + juego.getEstado() + "\n");
+            fw.write("Movimientos restantes: " + juego.getJugador().getMovimientosRestantes() + "\n");
+            fw.write("Puertos visitados: " + juego.getPaquete().getPuertosVisitados() + "\n");
+            fw.close();
+        } catch (Exception e) {
+            System.out.println("Error al guardar log: " + e.getMessage());
+        }
+    }
+
 }

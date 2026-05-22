@@ -99,6 +99,16 @@ public class PanelJuego extends JPanel {
         g.setColor(Color.WHITE);
         g.drawRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
 
+        int[][] rastro = juego.getPaquete().getRastro();
+        int cantidad = juego.getPaquete().getCantidadRastro();
+
+        for (int r = 0; r < cantidad; r++) {
+            int rx = rastro[r][1] * tamCelda + 15;
+            int ry = rastro[r][0] * tamCelda + 15;
+            g.setColor(new Color(255, 255, 0, 80));
+            g.fillOval(rx, ry, tamCelda - 30, tamCelda - 30);
+        }
+
         // mensaje de fin de juego
         if (juego.getEstado().equals(Juego.GANADO)) {
             g.setColor(new Color(0, 0, 0, 150));
