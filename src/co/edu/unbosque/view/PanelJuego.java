@@ -108,6 +108,18 @@ public class PanelJuego extends JPanel {
             g.setColor(new Color(255, 255, 0, 80));
             g.fillOval(rx, ry, tamCelda - 30, tamCelda - 30);
         }
+        // HUD
+        g.setColor(Color.WHITE);
+        g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 16));
+        g.drawString("Movimientos: " + juego.getJugador().getMovimientosRestantes(), 10,
+                juego.getTablero().getFilas() * tamCelda + 20);
+
+        int siguiente = juego.getPaquete().getPuertosVisitados() + 1;
+        if (siguiente <= juego.getPuertos().length) {
+            g.drawString("Puerto objetivo: P" + siguiente, 250, juego.getTablero().getFilas() * tamCelda + 20);
+        } else {
+            g.drawString("¡Todos los puertos visitados!", 250, juego.getTablero().getFilas() * tamCelda + 20);
+        }
 
         // mensaje de fin de juego
         if (juego.getEstado().equals(Juego.GANADO)) {
@@ -123,7 +135,6 @@ public class PanelJuego extends JPanel {
             g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 36));
             g.drawString("MISION FALLIDA", 120, getHeight() / 2);
         }
-
     }
 
     public void actualizar() {
