@@ -12,6 +12,7 @@ public class VentanaPrincipal extends JFrame {
     private PanelMenu panelMenu;
     private PanelJuego panelJuego;
     private Controlador controlador;
+    private JPanel panelJuegoCompleto;
 
     public VentanaPrincipal() {
         setTitle("Hackerlith");
@@ -50,6 +51,8 @@ public class VentanaPrincipal extends JFrame {
                 } else if (code == KeyEvent.VK_D) {
                     tecla = "D";
                     panelJuego.setDireccionJugador("DERECHA");
+                } else if (code == KeyEvent.VK_M) {
+                    mostrarMenuPausa();
                 }
                 if (!tecla.isEmpty()) {
                     controlador.moverJugador(tecla);
@@ -63,10 +66,10 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void iniciarJuego() {
-        controlador = new Controlador(panelMenu.getDificultad());
+        controlador = new Controlador(panelMenu.getDificultad(), panelMenu.isOrdenInverso());
         panelJuego = new PanelJuego(controlador.getJuego());
 
-        JPanel panelJuegoCompleto = new JPanel(new BorderLayout());
+        panelJuegoCompleto = new JPanel(new BorderLayout());
         panelJuegoCompleto.add(panelJuego, BorderLayout.CENTER);
         panelJuegoCompleto.add(new PanelInfo(controlador.getJuego(), panelMenu.getDificultad()), BorderLayout.EAST);
 
@@ -112,4 +115,79 @@ public class VentanaPrincipal extends JFrame {
     public PanelJuego getPanelJuego() {
         return panelJuego;
     }
+
+    private void mostrarMenuPausa() {
+        JDialog dialogo = new JDialog(this, true);
+        dialogo.setUndecorated(true);
+        dialogo.setSize(280, 270);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.getContentPane().setBackground(new Color(10, 10, 10));
+        dialogo.setLayout(null);
+
+        JLabel titulo = new JLabel("MENÚ DE PAUSA", SwingConstants.CENTER);
+        titulo.setFont(new Font("Monospaced", Font.BOLD, 16));
+        titulo.setForeground(Color.WHITE);
+        titulo.setBounds(0, 20, 280, 30);
+        dialogo.add(titulo);
+
+        JButton btnContinuar = crearBotonDialogo("CONTINUAR");
+        JButton btnReiniciar = crearBotonDialogo("REINICIAR NIVEL");
+        JButton btnObjetivos = crearBotonDialogo("VER OBJETIVOS");
+        JButton btnMenu = crearBotonDialogo("VOLVER AL MENÚ");
+
+        btnContinuar.setBounds(40, 65, 200, 36);
+        btnReiniciar.setBounds(40, 110, 200, 36);
+        btnObjetivos.setBounds(40, 155, 200, 36);
+        btnMenu.setBounds(40, 200, 200, 36);
+
+        dialogo.add(btnContinuar);
+        dialogo.add(btnReiniciar);
+        dialogo.add(btnObjetivos);
+        dialogo.add(btnMenu);
+
+        btnContinuar.addActionListener(e -> dialogo.dispose());
+        btnReiniciar.addActionListener(e -> {
+            dialogo.dispose();
+            reiniciarJuego();
+        });
+        btnObjetivos.addActionListener(e -> verObjetivos(dialogo));
+        btnMenu.addActionListener(e -> {
+            dialogo.dispose();
+            volverAlMenu();
+        });
+
+        dialogo.setVisible(true);
+    }
+
+    private JButton crearBotonDialogo(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setBackground(new Color(25, 25, 25));
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Monospaced", Font.BOLD, 13));
+        btn.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 80)));
+        btn.setFocusPainted(false);
+        return btn;
+    }
+
+    private void reiniciarJuego() {
+        contenedor.remove(panelJuegoCompleto);
+        iniciarJuego();
+    }
+
+    private void volverAlMenu() {
+        contenedor.remove(panelJuegoCompleto);
+        controlador = null;
+        panelJuego = null;
+        cardLayout.show(contenedor, "MENU");
+    }
+
+    private void verObjetivos(JDialog dialogo) {
+        int visitados = controlador.getJuego().getPaquete().getPuertosVisitados();
+        int total = controlador.getJuego().getPuertos().length;
+        String orden = controlador.getJuego().isOrdenInverso() ? "P3 → P2 → P1" : "P1 → P2 → P3";
+        JOptionPane.showMessageDialog(dialogo,
+                "Orden: " + orden + "\nProgreso: " + visitados + " / " + total + " puertos visitados",
+                "OBJETIVOS", JOptionPane.PLAIN_MESSAGE);
+    }
+
 }

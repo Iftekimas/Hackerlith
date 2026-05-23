@@ -148,8 +148,12 @@ public class PanelJuego extends JPanel {
         g.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 16));
         g.drawString("❤ " + juego.getJugador().getMovimientosRestantes() + "/" + juego.getMovimientosMax(), 15, 28);
         g.drawString("|", 180, 28);
-        int sig = juego.getPaquete().getPuertosVisitados() + 1;
-        String puertoText = sig <= juego.getPuertos().length ? "PUERTO: P" + sig : "¡COMPLETADO!";
+        int visitados = juego.getPaquete().getPuertosVisitados();
+        int sig = juego.isOrdenInverso()
+                ? (juego.getPuertos().length - visitados)
+                : (visitados + 1);
+        String puertoText = visitados >= juego.getPuertos().length ? "¡COMPLETADO!" : "PUERTO: P" + sig;
+
         g.drawString(puertoText, 200, 28);
         if (juego.getJugador().isModoSigilo()) {
             g.setColor(Color.CYAN);

@@ -53,16 +53,29 @@ public class Controlador {
             juego.getPaquete().agregarRastro(nuevaFila, nuevaColumna);
 
             // Mover el paquete
-            juego.getTablero().setCelda(nuevaFila, nuevaColumna, "VACIO");
+            String celdaAnterior = "VACIO";
+            for (Puerto p : juego.getPuertos()) {
+                if (p.getFila() == nuevaFila && p.getColumna() == nuevaColumna && !p.isVisitado()) {
+                    celdaAnterior = "PUERTO";
+                    break;
+                }
+            }
+            juego.getTablero().setCelda(nuevaFila, nuevaColumna, celdaAnterior);
             juego.getPaquete().setFila(paqNuevaFila);
             juego.getPaquete().setColumna(paqNuevaColumna);
             juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
 
+            System.out.println("Paquete en: " + paqNuevaFila + "," + paqNuevaColumna + " | ordenInverso: "
+                    + juego.isOrdenInverso() + " | visitados: " + juego.getPaquete().getPuertosVisitados());
+
             // Verificar si el paquete ha llegado a un puerto
             for (Puerto p : juego.getPuertos()) {
+                int numEsperado = juego.isOrdenInverso()
+                        ? (juego.getPuertos().length - juego.getPaquete().getPuertosVisitados())
+                        : (juego.getPaquete().getPuertosVisitados() + 1);
                 if (p.getFila() == paqNuevaFila && p.getColumna() == paqNuevaColumna
                         && !p.isVisitado()
-                        && p.getNumero() == juego.getPaquete().getPuertosVisitados() + 1) {
+                        && p.getNumero() == numEsperado) {
                     p.setVisitado(true);
                     juego.getPaquete().visitarPuerto();
                     juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
@@ -150,8 +163,8 @@ public class Controlador {
         }
     }
 
-    public Controlador(String dificultad) {
-        juego = new Juego(9, 14, 3, 64, false);
+    public Controlador(String dificultad, boolean ordenInverso) {
+        juego = new Juego(9, 14, 3, 64, ordenInverso);
         juego.inicializar(dificultad);
     }
 

@@ -10,6 +10,7 @@ public class PanelMenu extends JPanel {
     private String dificultad = "MEDIA";
     private JButton btnOrden;
     private boolean ordenInverso = false;
+    private JButton btnConfiguracion, btnInstrucciones, btnEstadisticas;
 
     public PanelMenu() {
         setBackground(new Color(10, 10, 10));
@@ -20,14 +21,20 @@ public class PanelMenu extends JPanel {
         btnAlta = crearBoton("ALTA", 660, 330, 100);
         btnOrden = crearBoton("OREDEN: NORMAL", 430, 380, 330);
 
-        btnNuevaPartida = crearBoton("NUEVA PARTIDA", 470, 400, 220);
-        btnSalir = crearBoton("SALIR", 470, 455, 220);
+        btnNuevaPartida = crearBoton("NUEVA PARTIDA", 470, 430, 220);
+        btnConfiguracion = crearBoton("CONFIGURACIÓN", 470, 473, 220);
+        btnInstrucciones = crearBoton("INSTRUCCIONES", 470, 516, 220);
+        btnEstadisticas = crearBoton("ESTADÍSTICAS", 470, 559, 220);
+        btnSalir = crearBoton("SALIR", 470, 602, 220);
 
         add(btnOrden);
         add(btnBaja);
         add(btnMedia);
         add(btnAlta);
         add(btnNuevaPartida);
+        add(btnConfiguracion);
+        add(btnInstrucciones);
+        add(btnEstadisticas);
         add(btnSalir);
 
         marcarDificultad("MEDIA");
@@ -36,8 +43,13 @@ public class PanelMenu extends JPanel {
             add(btnOrden);
             ordenInverso = !ordenInverso;
             btnOrden.setText(ordenInverso ? "ORDEN: INVERSO" : "ORDEN: NORMAL");
-            btnOrden.SetForeground(ordenInverso ? Color.YELLOW : Color.WHITE);
+            btnOrden.setForeground(ordenInverso ? Color.YELLOW : Color.WHITE);
         });
+
+        btnConfiguracion.addActionListener(e -> mostrarConfiguracion());
+        btnInstrucciones.addActionListener(e -> mostrarInstrucciones());
+        btnEstadisticas.addActionListener(e -> mostrarEstadisticas());
+
         btnBaja.addActionListener(e -> marcarDificultad("BAJA"));
         btnMedia.addActionListener(e -> marcarDificultad("MEDIA"));
         btnAlta.addActionListener(e -> marcarDificultad("ALTA"));
@@ -89,4 +101,26 @@ public class PanelMenu extends JPanel {
     public boolean isOrdenInverso() {
         return ordenInverso;
     }
+
+    private void mostrarConfiguracion() {
+        JOptionPane.showMessageDialog(this,
+                "Dificultad: " + dificultad + "\nOrden: " + (ordenInverso ? "INVERSO" : "NORMAL"),
+                "CONFIGURACIÓN", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void mostrarInstrucciones() {
+        JOptionPane.showMessageDialog(this,
+                "OBJETIVO\nEmpuja el paquete a todos los puertos en orden\nantes de quedarte sin movimientos.\n\n" +
+                        "CONTROLES\n  W / ↑  Arriba\n  S / ↓  Abajo\n  A / ←  Izquierda\n  D / →  Derecha\n" +
+                        "  E       Modo Sigilo\n  M       Pausa\n\n" +
+                        "AMENAZAS\n  Antivirus  — te elimina al tocarte\n  Escáner    — reduce tus movimientos\n  Firewall   — bloquea el paso",
+                "INSTRUCCIONES", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void mostrarEstadisticas() {
+        JOptionPane.showMessageDialog(this,
+                "Estadísticas no disponibles aún.",
+                "ESTADÍSTICAS", JOptionPane.PLAIN_MESSAGE);
+    }
+
 }

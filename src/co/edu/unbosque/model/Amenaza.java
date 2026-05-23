@@ -27,7 +27,9 @@ public class Amenaza {
 
         if (tablero.estaEnRango(nuevaFila, nuevaColumna)
                 && tablero.getCelda(nuevaFila, nuevaColumna).equals("VACIO")) {
-            tablero.setCelda(fila, columna, "VACIO");
+            if (tablero.getCelda(fila, columna).equals(tipo)) {
+                tablero.setCelda(fila, columna, "VACIO");
+            }
             fila = nuevaFila;
             columna = nuevaColumna;
             tablero.setCelda(fila, columna, tipo);
