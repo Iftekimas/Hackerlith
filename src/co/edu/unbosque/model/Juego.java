@@ -112,8 +112,8 @@ public class Juego {
     }
 
     // iniciliza el juego
-    public void inicializar() {
-        // Borde exterior
+    public void inicializar(String dificultad) {
+        // Paredes exteriores
         for (int c = 0; c < 14; c++) {
             tablero.setCelda(0, c, "PARED");
             tablero.setCelda(8, c, "PARED");
@@ -122,28 +122,44 @@ public class Juego {
             tablero.setCelda(r, 0, "PARED");
             tablero.setCelda(r, 13, "PARED");
         }
-        // Borde interior
 
-        // Nodos de energía
         nodos = new NodoEnergia[2];
         nodos[0] = new NodoEnergia(3, 9);
         nodos[1] = new NodoEnergia(5, 4);
         tablero.setCelda(3, 9, "NODO");
         tablero.setCelda(5, 4, "NODO");
 
-        // Puertos
         puertos[0] = new Puerto(2, 11, 1);
         puertos[1] = new Puerto(6, 3, 2);
         puertos[2] = new Puerto(6, 11, 3);
 
-        // Amenazas
-        amenazas = new Amenaza[2];
-        amenazas[0] = new Amenaza(3, 5, "ANTIVIRUS");
-        amenazas[1] = new Amenaza(5, 8, "ESCANER");
-        tablero.setCelda(3, 5, "ANTIVIRUS");
-        tablero.setCelda(5, 8, "ESCANER");
+        // Amenazas y firewalls según dificultad
+        if (dificultad.equals("BAJA")) {
+            amenazas = new Amenaza[1];
+            amenazas[0] = new Amenaza(3, 5, "ANTIVIRUS");
+            tablero.setCelda(3, 5, "ANTIVIRUS");
+        } else if (dificultad.equals("ALTA")) {
+            amenazas = new Amenaza[3];
+            amenazas[0] = new Amenaza(3, 5, "ANTIVIRUS");
+            amenazas[1] = new Amenaza(5, 8, "ESCANER");
+            amenazas[2] = new Amenaza(2, 7, "ANTIVIRUS");
+            tablero.setCelda(3, 5, "ANTIVIRUS");
+            tablero.setCelda(5, 8, "ESCANER");
+            tablero.setCelda(2, 7, "ANTIVIRUS");
+            tablero.setCelda(3, 7, "FIREWALL");
+            tablero.setCelda(4, 3, "FIREWALL");
+            tablero.setCelda(5, 6, "FIREWALL");
+            tablero.setCelda(4, 10, "FIREWALL");
+        } else { // MEDIA
+            amenazas = new Amenaza[2];
+            amenazas[0] = new Amenaza(3, 5, "ANTIVIRUS");
+            amenazas[1] = new Amenaza(5, 8, "ESCANER");
+            tablero.setCelda(3, 5, "ANTIVIRUS");
+            tablero.setCelda(5, 8, "ESCANER");
+            tablero.setCelda(3, 7, "FIREWALL");
+            tablero.setCelda(5, 6, "FIREWALL");
+        }
 
-        // Paquete
         paquete = new PaqueteDatos(4, 6);
         tablero.setCelda(4, 6, "PAQUETE");
 

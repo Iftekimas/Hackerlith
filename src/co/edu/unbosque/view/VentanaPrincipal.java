@@ -1,80 +1,38 @@
 package co.edu.unbosque.view;
 
-import javax.swing.JFrame;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import co.edu.unbosque.controller.Controlador;
 
 public class VentanaPrincipal extends JFrame {
 
+    private CardLayout cardLayout;
+    private JPanel contenedor;
+    private PanelMenu panelMenu;
     private PanelJuego panelJuego;
+    private Controlador controlador;
 
-    public VentanaPrincipal(Controlador controlador) {
+    public VentanaPrincipal() {
         setTitle("Hackerlith");
         setSize(1220, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
 
-        panelJuego = new PanelJuego(controlador.getJuego());
-        add(panelJuego, BorderLayout.CENTER);
+        cardLayout = new CardLayout();
+        contenedor = new JPanel(cardLayout);
 
-        PanelInfo panelInfo = new PanelInfo(controlador.getJuego());
-        add(panelInfo, BorderLayout.EAST);
+        panelMenu = new PanelMenu();
+        panelMenu.getBtnNuevaPartida().addActionListener(e -> iniciarJuego());
+        contenedor.add(panelMenu, "MENU");
 
-        // panel de botones
-        JPanel panelBotones = new JPanel(new GridLayout(2, 3));
-        JButton btnArriba = new JButton("↑");
-        JButton btnAbajo = new JButton("↓");
-        JButton btnIzquierda = new JButton("←");
-        JButton btnDerecha = new JButton("→");
+        add(contenedor);
 
-        // Agregar botones al panel
-
-        panelBotones.add(new JPanel());
-        panelBotones.add(btnArriba);
-        panelBotones.add(new JPanel());
-        panelBotones.add(btnIzquierda);
-        panelBotones.add(btnAbajo);
-        panelBotones.add(btnDerecha);
-
-        add(panelBotones, BorderLayout.SOUTH);
-
-        // Acción de los botones
-        btnArriba.addActionListener(e -> {
-            panelJuego.setDireccionJugador("ATRAS");
-            controlador.moverJugador("W");
-            panelJuego.actualizar();
-        });
-
-        btnAbajo.addActionListener(e -> {
-            panelJuego.setDireccionJugador("FRENTE");
-            controlador.moverJugador("S");
-            panelJuego.actualizar();
-        });
-        btnIzquierda.addActionListener(e -> {
-            panelJuego.setDireccionJugador("IZQUIERDA");
-            controlador.moverJugador("A");
-            panelJuego.actualizar();
-        });
-        btnDerecha.addActionListener(e -> {
-            panelJuego.setDireccionJugador("DERECHA");
-            controlador.moverJugador("D");
-            panelJuego.actualizar();
-        });
-
-        // teclado
         addKeyListener(new KeyAdapter() {
-            // Manejar teclas W, A, S, D para mover al jugador y E para activar modo sigilo
             @Override
             public void keyPressed(KeyEvent e) {
+                if (controlador == null)
+                    return;
                 int code = e.getKeyCode();
                 String tecla = "";
                 if (code == KeyEvent.VK_W) {
@@ -93,16 +51,62 @@ public class VentanaPrincipal extends JFrame {
                     tecla = "D";
                     panelJuego.setDireccionJugador("DERECHA");
                 }
-
                 if (!tecla.isEmpty()) {
                     controlador.moverJugador(tecla);
                     panelJuego.actualizar();
                 }
             }
-
         });
+
         setFocusable(true);
         setVisible(true);
+    }
+
+    private void iniciarJuego() {
+        controlador = new Controlador(panelMenu.getDificultad());
+        panelJuego = new PanelJuego(controlador.getJuego());
+
+        JPanel panelJuegoCompleto = new JPanel(new BorderLayout());
+        panelJuegoCompleto.add(panelJuego, BorderLayout.CENTER);
+        panelJuegoCompleto.add(new PanelInfo(controlador.getJuego(), panelMenu.getDificultad()), BorderLayout.EAST);
+
+        JPanel panelBotones = new JPanel(new GridLayout(2, 3));
+        JButton btnArriba = new JButton("↑");
+        JButton btnAbajo = new JButton("↓");
+        JButton btnIzquierda = new JButton("←");
+        JButton btnDerecha = new JButton("→");
+        panelBotones.add(new JPanel());
+        panelBotones.add(btnArriba);
+        panelBotones.add(new JPanel());
+        panelBotones.add(btnIzquierda);
+        panelBotones.add(btnAbajo);
+        panelBotones.add(btnDerecha);
+        panelJuegoCompleto.add(panelBotones, BorderLayout.SOUTH);
+
+        btnArriba.addActionListener(e -> {
+            panelJuego.setDireccionJugador("ATRAS");
+            controlador.moverJugador("W");
+            panelJuego.actualizar();
+        });
+        btnAbajo.addActionListener(e -> {
+            panelJuego.setDireccionJugador("FRENTE");
+            controlador.moverJugador("S");
+            panelJuego.actualizar();
+        });
+        btnIzquierda.addActionListener(e -> {
+            panelJuego.setDireccionJugador("IZQUIERDA");
+            controlador.moverJugador("A");
+            panelJuego.actualizar();
+        });
+        btnDerecha.addActionListener(e -> {
+            panelJuego.setDireccionJugador("DERECHA");
+            controlador.moverJugador("D");
+            panelJuego.actualizar();
+        });
+
+        contenedor.add(panelJuegoCompleto, "JUEGO");
+        cardLayout.show(contenedor, "JUEGO");
+        requestFocusInWindow();
     }
 
     public PanelJuego getPanelJuego() {

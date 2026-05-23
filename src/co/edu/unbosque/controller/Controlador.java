@@ -6,13 +6,6 @@ public class Controlador {
 
     private Juego juego;
 
-    public Controlador() {
-        // Configuración inicial del juego: tablero de 8x8, 3 amenazas, 64 movimientos,
-        juego = new Juego(9, 14, 3, 64, false);
-        juego.inicializar();
-
-    }
-
     public Juego getJuego() {
         return juego;
     }
@@ -155,6 +148,11 @@ public class Controlador {
                 juego.getTablero().setCelda(jf, jc, "VACIO");
             }
         }
+    }
+
+    public Controlador(String dificultad) {
+        juego = new Juego(9, 14, 3, 64, false);
+        juego.inicializar(dificultad);
     }
 
 }

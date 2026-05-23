@@ -7,21 +7,8 @@ import co.edu.unbosque.model.Juego;
 public class PanelInfo extends JPanel {
 
     private Juego juego;
+    private String dificultad;
     private Image imgJugador, imgPuerto, imgFirewall, imgAntivirus, imgEscaner, imgCasilla;
-
-    public PanelInfo(Juego juego) {
-        this.juego = juego;
-        setBackground(new Color(15, 15, 15));
-        setPreferredSize(new Dimension(220, 0));
-
-        imgJugador = new ImageIcon(getClass().getResource("/resources/Marcianito/Mirando al frente.png")).getImage();
-        imgPuerto = new ImageIcon(getClass().getResource("/resources/Partida/puerto 1.png")).getImage();
-        imgFirewall = new ImageIcon(getClass().getResource("/resources/Partida/Firewall.png")).getImage();
-        imgAntivirus = new ImageIcon(getClass().getResource("/resources/Partida/Antivirus proactivo.png")).getImage();
-        imgEscaner = new ImageIcon(getClass().getResource("/resources/Partida/Escaner de latencia.png")).getImage();
-        imgCasilla = new ImageIcon(getClass().getResource("/resources/Partida/Punto guia.png")).getImage();
-
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -31,7 +18,7 @@ public class PanelInfo extends JPanel {
         // leyenda
 
         g.setColor(Color.WHITE);
-        g.drawString("LEYENDA", 20, 40);
+        g.drawString("DIFICULTAD: " + dificultad, 20, 40);
         g.setColor(new Color(100, 100, 100));
         g.drawLine(10, 48, 210, 48);
 
@@ -80,4 +67,19 @@ public class PanelInfo extends JPanel {
             g.drawString(texto, x + size + 8, y - 2);
         }
     }
+
+    public PanelInfo(Juego juego, String dificultad) {
+        this.juego = juego;
+        this.dificultad = dificultad;
+        setBackground(new Color(15, 15, 15));
+        setPreferredSize(new Dimension(220, 0));
+
+        imgJugador = new ImageIcon(getClass().getResource("/resources/Marcianito/Mirando al frente.png")).getImage();
+        imgPuerto = new ImageIcon(getClass().getResource("/resources/Partida/puerto 1.png")).getImage();
+        imgFirewall = new ImageIcon(getClass().getResource("/resources/Partida/Firewall.png")).getImage();
+        imgAntivirus = new ImageIcon(getClass().getResource("/resources/Partida/Antivirus proactivo.png")).getImage();
+        imgEscaner = new ImageIcon(getClass().getResource("/resources/Partida/Escaner de latencia.png")).getImage();
+        imgCasilla = new ImageIcon(getClass().getResource("/resources/Partida/Punto guia.png")).getImage();
+    }
+
 }
