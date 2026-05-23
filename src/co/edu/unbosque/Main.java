@@ -1,4 +1,4 @@
-package co.edu.unbosque.model;
+package co.edu.unbosque;
 
 import co.edu.unbosque.controller.Controlador;
 import co.edu.unbosque.view.VentanaPrincipal;

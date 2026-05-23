@@ -1,4 +1,4 @@
 === LOG DE PARTIDA HACKERLITH ===
-Estado final: PERDIDO
-Movimientos restantes: 0
-Puertos visitados: 0
+Estado final: GANADO
+Movimientos restantes: 33
+Puertos visitados: 3

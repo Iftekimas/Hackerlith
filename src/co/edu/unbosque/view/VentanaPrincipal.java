@@ -19,7 +19,7 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal(Controlador controlador) {
         setTitle("Hackerlith");
-        setSize(800, 750);
+        setSize(1000, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

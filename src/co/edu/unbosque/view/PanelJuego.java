@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 public class PanelJuego extends JPanel {
 
     private Juego juego;
-    private int tamCelda = 50;
+    private int tamCelda = 64;
 
     private Image imgAntivirus;
     private Image imgEscaner;
@@ -20,19 +20,29 @@ public class PanelJuego extends JPanel {
     private Image imgPuerto1;
     private Image imgPuerto2;
     private Image imgPuerto3;
+    private Image imgMarcianito;
+    private Image imgMarcianitoDer;
+    private Image imgMarcianitIzq;
+    private Image imgMarcianitAtras;
 
     public PanelJuego(Juego juego) {
         this.juego = juego;
         setBackground(Color.BLACK);
-
+        // Cargar imágenes
         imgAntivirus = new ImageIcon(getClass().getResource("/resources/Partida/Antivirus proactivo.png")).getImage();
         imgEscaner = new ImageIcon(getClass().getResource("/resources/Partida/Escaner de latencia.png")).getImage();
         imgFirewall = new ImageIcon(getClass().getResource("/resources/Partida/Firewall.png")).getImage();
-        imgPaquete = new ImageIcon(getClass().getResource("/resources/Partida/Pared.png")).getImage();
-        imgCasilla = new ImageIcon(getClass().getResource("/resources/Partida/Punto.png")).getImage();
+        imgPaquete = new ImageIcon(getClass().getResource("/resources/Partida/archivo.png")).getImage();
+        imgCasilla = new ImageIcon(getClass().getResource("/resources/Partida/Punto guia.png")).getImage();
         imgPuerto1 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 1.png")).getImage();
         imgPuerto2 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 2.png")).getImage();
         imgPuerto3 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 3.png")).getImage();
+        imgMarcianito = new ImageIcon(getClass().getResource("/resources/Marcianito/Mirando al frente.png")).getImage();
+        imgMarcianitoDer = new ImageIcon(getClass().getResource("/resources/Marcianito/Mirando a la derecha.png"))
+                .getImage();
+        imgMarcianitIzq = new ImageIcon(getClass().getResource("/resources/Marcianito/mirando a la izquierda.png"))
+                .getImage();
+        imgMarcianitAtras = new ImageIcon(getClass().getResource("/resources/Marcianito/mirando atras.png")).getImage();
 
     }
 
@@ -96,7 +106,7 @@ public class PanelJuego extends JPanel {
         }
         // Dibujar el jugador
         g.setColor(Color.GREEN);
-        // fondo del jugador
+        // Fondo del jugador
         int jf = juego.getJugador().getFila();
         int jc = juego.getJugador().getColumna();
         g.setColor(Color.GREEN);
