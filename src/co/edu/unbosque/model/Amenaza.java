@@ -6,12 +6,14 @@ public class Amenaza {
     private int columna;
     private String tipo;
 
+    // Constructor
     public Amenaza(int fila, int columna, String tipo) {
         this.fila = fila;
         this.columna = columna;
         this.tipo = tipo;
     }
 
+    // Método para mover la amenaza aleatoriamente
     public void mover(Tablero tablero) {
         int[] dFilas = { -1, 1, 0, 0 };
         int[] dColumnas = { 0, 0, -1, 1 };
