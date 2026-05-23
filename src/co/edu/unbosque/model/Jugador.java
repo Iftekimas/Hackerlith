@@ -6,6 +6,7 @@ public class Jugador {
     private int columna;
     private int movimientosRestantes;
     private boolean modoSigilo;
+    private boolean sigiloUsado = false;
 
     public Jugador(int fila, int columna, int movimientosRestantes) {
         this.fila = fila;
@@ -45,5 +46,13 @@ public class Jugador {
 
     public void setModoSigilo(boolean modoSigilo) {
         this.modoSigilo = modoSigilo;
+    }
+
+    public boolean isSigiloUsado() {
+        return sigiloUsado;
+    }
+
+    public void setSigiloUsado(boolean b) {
+        this.sigiloUsado = b;
     }
 }

@@ -1,4 +1,51 @@
 === LOG DE PARTIDA HACKERLITH ===
-Estado final: PERDIDO
-Movimientos restantes: 59
-Puertos visitados: 0
+Estado final:         PERDIDO
+Dificultad:           MEDIA
+Movimientos restantes: 95
+Puertos visitados:    1
+Total de turnos:      43
+
+=== HISTORIAL DE MOVIMIENTOS ===
+Turno 1 | Dir: D | Pos: (6,4) | Movimientos restantes: 125 | Puertos visitados: 0
+Turno 2 | Dir: W | Pos: (5,4) | Movimientos restantes: 124 | Puertos visitados: 0
+Turno 3 | Dir: D | Pos: (5,5) | Movimientos restantes: 123 | Puertos visitados: 0
+Turno 4 | Dir: D | Pos: (5,6) | Movimientos restantes: 122 | Puertos visitados: 0
+Turno 5 | Dir: D | Pos: (5,7) | Movimientos restantes: 121 | Puertos visitados: 0
+Turno 6 | Dir: D | Pos: (5,8) | Movimientos restantes: 120 | Puertos visitados: 0
+Turno 7 | Dir: S | Pos: (6,8) | Movimientos restantes: 119 | Puertos visitados: 0
+Turno 8 | Dir: D | Pos: (6,9) | Movimientos restantes: 118 | Puertos visitados: 0
+Turno 9 | Dir: A | Pos: (6,8) | Movimientos restantes: 117 | Puertos visitados: 0
+Turno 10 | Dir: W | Pos: (5,8) | Movimientos restantes: 116 | Puertos visitados: 0
+Turno 11 | Dir: D | Pos: (5,9) | Movimientos restantes: 115 | Puertos visitados: 0
+Turno 12 | Dir: S | Pos: (6,9) | Movimientos restantes: 114 | Puertos visitados: 0
+Turno 13 | Dir: W | Pos: (5,9) | Movimientos restantes: 113 | Puertos visitados: 0
+Turno 14 | Dir: S | Pos: (6,9) | Movimientos restantes: 112 | Puertos visitados: 0
+Turno 15 | Dir: S | Pos: (7,9) | Movimientos restantes: 111 | Puertos visitados: 0
+Turno 16 | Dir: D | Pos: (7,10) | Movimientos restantes: 110 | Puertos visitados: 0
+Turno 17 | Dir: D | Pos: (7,11) | Movimientos restantes: 109 | Puertos visitados: 0
+Turno 18 | Dir: D | Pos: (7,12) | Movimientos restantes: 108 | Puertos visitados: 0
+Turno 19 | Dir: W | Pos: (6,12) | Movimientos restantes: 107 | Puertos visitados: 0
+Turno 20 | Dir: W | Pos: (5,12) | Movimientos restantes: 106 | Puertos visitados: 0
+Turno 21 | Dir: A | Pos: (5,11) | Movimientos restantes: 105 | Puertos visitados: 0
+Turno 22 | Dir: A | Pos: (5,10) | Movimientos restantes: 104 | Puertos visitados: 0
+Turno 23 | Dir: D | Pos: (5,11) | Movimientos restantes: 103 | Puertos visitados: 0
+Turno 24 | Dir: S | Pos: (6,11) | Movimientos restantes: 102 | Puertos visitados: 0
+Turno 25 | Dir: S | Pos: (7,11) | Movimientos restantes: 101 | Puertos visitados: 0
+Turno 26 | Dir: A | Pos: (7,10) | Movimientos restantes: 100 | Puertos visitados: 0
+Turno 27 | Dir: A | Pos: (7,9) | Movimientos restantes: 99 | Puertos visitados: 0
+Turno 28 | Dir: W | Pos: (6,9) | Movimientos restantes: 98 | Puertos visitados: 0
+Turno 29 | Dir: W | Pos: (5,9) | Movimientos restantes: 97 | Puertos visitados: 0
+Turno 30 | Dir: S | Pos: (6,9) | Movimientos restantes: 96 | Puertos visitados: 0
+Turno 31 | Dir: S | Pos: (7,9) | Movimientos restantes: 95 | Puertos visitados: 0
+Turno 32 | Dir: D | Pos: (7,10) | Movimientos restantes: 94 | Puertos visitados: 0
+Turno 33 | Dir: D | Pos: (7,11) | Movimientos restantes: 93 | Puertos visitados: 0
+Turno 34 | Dir: D | Pos: (7,12) | Movimientos restantes: 92 | Puertos visitados: 0
+Turno 35 | Dir: W | Pos: (6,12) | Movimientos restantes: 91 | Puertos visitados: 0
+Turno 36 | Dir: W | Pos: (5,12) | Movimientos restantes: 90 | Puertos visitados: 0
+Turno 37 | Dir: W | Pos: (4,12) | Movimientos restantes: 89 | Puertos visitados: 0
+Turno 38 | Dir: A | Pos: (4,11) | Movimientos restantes: 88 | Puertos visitados: 0
+Turno 39 | Dir: A | Pos: (4,10) | Movimientos restantes: 87 | Puertos visitados: 0
+Turno 40 | Dir: A | Pos: (4,9) | Movimientos restantes: 86 | Puertos visitados: 1
+Turno 41 | Dir: S | Pos: (5,9) | Movimientos restantes: 97 | Puertos visitados: 1
+Turno 42 | Dir: A | Pos: (5,8) | Movimientos restantes: 96 | Puertos visitados: 1
+Turno 43 | Dir: W | Pos: (4,8) | Movimientos restantes: 95 | Puertos visitados: 1

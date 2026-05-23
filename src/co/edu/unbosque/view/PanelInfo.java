@@ -50,7 +50,33 @@ public class PanelInfo extends JPanel {
         g.setColor(new Color(200, 200, 200));
         g.drawString("Visita todos los", 14, y + 30);
         g.drawString("puertos en orden.", 14, y + 45);
-        g.drawString("P1 -> P2 -> P3", 14, y + 65);
+        int numP = juego.getPuertos().length;
+        String orden = "";
+        if (juego.isOrdenInverso()) {
+            for (int i = numP; i >= 1; i--) {
+                orden += "P" + i;
+                if (i > 1) orden += "->";
+            }
+        } else {
+            for (int i = 1; i <= numP; i++) {
+                orden += "P" + i;
+                if (i < numP) orden += "->";
+            }
+        }
+        g.drawString(orden, 14, y + 65);
+
+        // Controles
+        y += 90;
+        g.setColor(new Color(100, 100, 100));
+        g.drawLine(10, y - 6, 210, y - 6);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Monospaced", Font.BOLD, 14));
+        g.drawString("CONTROLES", 20, y + 10);
+        g.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        g.setColor(new Color(200, 200, 200));
+        g.drawString("W A S D  mover", 14, y + 30);
+        g.drawString("E        escudo", 14, y + 46);
+        g.drawString("M        menu", 14, y + 62);
     }
 
     private void dibujarFila(Graphics g, Image img, String texto, int x, int y, int size) {
@@ -74,7 +100,8 @@ public class PanelInfo extends JPanel {
         setBackground(new Color(15, 15, 15));
         setPreferredSize(new Dimension(220, 0));
 
-        imgJugador = new ImageIcon(getClass().getResource("/resources/Marcianito/Mirando al frente.png")).getImage();
+        imgJugador = new ImageIcon(getClass().getResource("/resources/Personajes/Marcianito/Mirando al frente.png"))
+                .getImage();
         imgPuerto = new ImageIcon(getClass().getResource("/resources/Partida/puerto 1.png")).getImage();
         imgFirewall = new ImageIcon(getClass().getResource("/resources/Partida/Firewall.png")).getImage();
         imgAntivirus = new ImageIcon(getClass().getResource("/resources/Partida/Antivirus proactivo.png")).getImage();
