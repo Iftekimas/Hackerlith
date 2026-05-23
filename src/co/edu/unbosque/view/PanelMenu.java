@@ -10,22 +10,34 @@ public class PanelMenu extends JPanel {
     private String dificultad = "MEDIA";
     private JButton btnOrden;
     private boolean ordenInverso = false;
-    private JButton btnConfiguracion, btnInstrucciones, btnEstadisticas;
+    private JButton btnConfiguracion, btnInstrucciones;
+    private JButton btnSkin;
+    private String skin = "MARCIANITO";
+    private JButton btnFilas, btnColumnas, btnPuertos;
+    private int filas = 9;
+    private int columnas = 14;
+    private int numPuertos = 3;
 
     public PanelMenu() {
         setBackground(new Color(10, 10, 10));
         setLayout(null);
 
+        // crear botones
+
         btnBaja = crearBoton("BAJA", 430, 330, 100);
         btnMedia = crearBoton("MEDIA", 545, 330, 100);
         btnAlta = crearBoton("ALTA", 660, 330, 100);
-        btnOrden = crearBoton("OREDEN: NORMAL", 430, 380, 330);
+        btnOrden = crearBoton("ORDEN: NORMAL", 430, 380, 330);
+        btnSkin = crearBoton("SKIN: MARCIANITO", 430, 423, 330);
+        btnFilas = crearBoton("FILAS: 9", 430, 466, 95);
+        btnColumnas = crearBoton("COLS: 14", 530, 466, 100);
+        btnPuertos = crearBoton("PUERTOS: 3", 635, 466, 125);
+        btnNuevaPartida = crearBoton("NUEVA PARTIDA", 470, 509, 220);
+        btnConfiguracion = crearBoton("CONFIGURACIÓN", 470, 552, 220);
+        btnInstrucciones = crearBoton("INSTRUCCIONES", 470, 595, 220);
+        btnSalir = crearBoton("SALIR", 470, 638, 220);
 
-        btnNuevaPartida = crearBoton("NUEVA PARTIDA", 470, 430, 220);
-        btnConfiguracion = crearBoton("CONFIGURACIÓN", 470, 473, 220);
-        btnInstrucciones = crearBoton("INSTRUCCIONES", 470, 516, 220);
-        btnEstadisticas = crearBoton("ESTADÍSTICAS", 470, 559, 220);
-        btnSalir = crearBoton("SALIR", 470, 602, 220);
+        // añadir botones
 
         add(btnOrden);
         add(btnBaja);
@@ -34,8 +46,11 @@ public class PanelMenu extends JPanel {
         add(btnNuevaPartida);
         add(btnConfiguracion);
         add(btnInstrucciones);
-        add(btnEstadisticas);
         add(btnSalir);
+        add(btnSkin);
+        add(btnFilas);
+        add(btnColumnas);
+        add(btnPuertos);
 
         marcarDificultad("MEDIA");
 
@@ -48,12 +63,28 @@ public class PanelMenu extends JPanel {
 
         btnConfiguracion.addActionListener(e -> mostrarConfiguracion());
         btnInstrucciones.addActionListener(e -> mostrarInstrucciones());
-        btnEstadisticas.addActionListener(e -> mostrarEstadisticas());
+        btnSkin.addActionListener(e -> {
+            skin = skin.equals("MARCIANITO") ? "TITA" : "MARCIANITO";
+            btnSkin.setText("SKIN: " + skin);
+        });
 
         btnBaja.addActionListener(e -> marcarDificultad("BAJA"));
         btnMedia.addActionListener(e -> marcarDificultad("MEDIA"));
         btnAlta.addActionListener(e -> marcarDificultad("ALTA"));
         btnSalir.addActionListener(e -> System.exit(0));
+
+        btnFilas.addActionListener(e -> {
+            filas = (filas >= 20) ? 5 : filas + 1;
+            btnFilas.setText("FILAS: " + filas);
+        });
+        btnColumnas.addActionListener(e -> {
+            columnas = (columnas >= 20) ? 5 : columnas + 1;
+            btnColumnas.setText("COLS: " + columnas);
+        });
+        btnPuertos.addActionListener(e -> {
+            numPuertos = (numPuertos >= 5) ? 2 : numPuertos + 1;
+            btnPuertos.setText("PUERTOS: " + numPuertos);
+        });
     }
 
     private void marcarDificultad(String d) {
@@ -88,6 +119,7 @@ public class PanelMenu extends JPanel {
         g.setColor(new Color(180, 180, 180));
         g.setFont(new Font("Monospaced", Font.BOLD, 12));
         g.drawString("DIFICULTAD:", 340, 352);
+        g.drawString("MATRIZ:", 340, 485);
     }
 
     public String getDificultad() {
@@ -104,7 +136,9 @@ public class PanelMenu extends JPanel {
 
     private void mostrarConfiguracion() {
         JOptionPane.showMessageDialog(this,
-                "Dificultad: " + dificultad + "\nOrden: " + (ordenInverso ? "INVERSO" : "NORMAL"),
+                "Dificultad: " + dificultad + "\nOrden: " + (ordenInverso ? "INVERSO" : "NORMAL")
+                        + "\nMatriz: " + filas + " filas × " + columnas + " columnas"
+                        + "\nPuertos: " + numPuertos,
                 "CONFIGURACIÓN", JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -117,10 +151,20 @@ public class PanelMenu extends JPanel {
                 "INSTRUCCIONES", JOptionPane.PLAIN_MESSAGE);
     }
 
-    private void mostrarEstadisticas() {
-        JOptionPane.showMessageDialog(this,
-                "Estadísticas no disponibles aún.",
-                "ESTADÍSTICAS", JOptionPane.PLAIN_MESSAGE);
+    public String getSkin() {
+        return skin;
+    }
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public int getNumPuertos() {
+        return numPuertos;
     }
 
 }

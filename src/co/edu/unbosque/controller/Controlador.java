@@ -6,6 +6,9 @@ public class Controlador {
 
     private Juego juego;
 
+    private java.util.ArrayList<String> historial = new java.util.ArrayList<>();
+    private int turno = 0;
+
     public Juego getJuego() {
         return juego;
     }
@@ -65,9 +68,6 @@ public class Controlador {
             juego.getPaquete().setColumna(paqNuevaColumna);
             juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
 
-            System.out.println("Paquete en: " + paqNuevaFila + "," + paqNuevaColumna + " | ordenInverso: "
-                    + juego.isOrdenInverso() + " | visitados: " + juego.getPaquete().getPuertosVisitados());
-
             // Verificar si el paquete ha llegado a un puerto
             for (Puerto p : juego.getPuertos()) {
                 int numEsperado = juego.isOrdenInverso()
@@ -87,7 +87,15 @@ public class Controlador {
         // Mover al jugador
         juego.getJugador().setFila(nuevaFila);
         juego.getJugador().setColumna(nuevaColumna);
+
+        turno++;
+        historial.add("Turno " + turno + " | Dir: " + direccion
+                + " | Pos: (" + nuevaFila + "," + nuevaColumna + ")"
+                + " | Movimientos restantes: " + (juego.getJugador().getMovimientosRestantes() - 1)
+                + " | Puertos visitados: " + juego.getPaquete().getPuertosVisitados());
+
         verificarNodos();
+        verificarSandwichFirewall();
         // Reducir movimientos restantes
         juego.getJugador().setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - 1);
         // Verificar encuentros con amenazas
@@ -114,22 +122,25 @@ public class Controlador {
         for (Amenaza a : juego.getAmenazas()) {
             if (a == null)
                 continue;
-
             boolean adyacente = (Math.abs(a.getFila() - jf) + Math.abs(a.getColumna() - jc)) == 1;
-
             if (adyacente) {
                 if (a.getTipo().equals("ANTIVIRUS")) {
-                    if (juego.getJugador().isModoSigilo()) {
+                    if (juego.getJugador().isModoSigilo())
                         juego.getJugador().setModoSigilo(false);
-                    } else {
+                    else
                         juego.setEstado(Juego.PERDIDO);
-                    }
                 } else if (a.getTipo().equals("ESCANER")) {
-                    int reduccion = (int) (juego.getJugador().getMovimientosRestantes() * 0.05);
+                    double pct;
+                    if (juego.getDificultad().equals("ALTA")) {
+                        pct = 0.15;
+                    } else {
+                        pct = 0.05;
+                    }
+                    int reduccion = (int) (juego.getJugador().getMovimientosRestantes() * pct);
                     if (reduccion < 1)
                         reduccion = 1;
-                    juego.getJugador()
-                            .setMovimientosRestantes(juego.getJugador().getMovimientosRestantes() - reduccion);
+                    juego.getJugador().setMovimientosRestantes(
+                            juego.getJugador().getMovimientosRestantes() - reduccion);
                 }
             }
         }
@@ -139,12 +150,38 @@ public class Controlador {
         try {
             java.io.FileWriter fw = new java.io.FileWriter("log_partida.txt");
             fw.write("=== LOG DE PARTIDA HACKERLITH ===\n");
-            fw.write("Estado final: " + juego.getEstado() + "\n");
+            fw.write("Estado final:         " + juego.getEstado() + "\n");
+            fw.write("Dificultad:           " + juego.getDificultad() + "\n");
             fw.write("Movimientos restantes: " + juego.getJugador().getMovimientosRestantes() + "\n");
-            fw.write("Puertos visitados: " + juego.getPaquete().getPuertosVisitados() + "\n");
+            fw.write("Puertos visitados:    " + juego.getPaquete().getPuertosVisitados() + "\n");
+            fw.write("Total de turnos:      " + turno + "\n");
+            fw.write("\n=== HISTORIAL DE MOVIMIENTOS ===\n");
+            for (String mov : historial) {
+                fw.write(mov + "\n");
+            }
             fw.close();
         } catch (Exception e) {
             System.out.println("Error al guardar log: " + e.getMessage());
+        }
+    }
+
+    private void verificarSandwichFirewall() {
+        int jf = juego.getJugador().getFila();
+        int jc = juego.getJugador().getColumna();
+        Tablero t = juego.getTablero();
+
+        boolean sandwichH = t.estaEnRango(jf, jc - 1) && t.estaEnRango(jf, jc + 1)
+                && t.getCelda(jf, jc - 1).equals("FIREWALL")
+                && t.getCelda(jf, jc + 1).equals("FIREWALL");
+
+        boolean sandwichV = t.estaEnRango(jf - 1, jc) && t.estaEnRango(jf + 1, jc)
+                && t.getCelda(jf - 1, jc).equals("FIREWALL")
+                && t.getCelda(jf + 1, jc).equals("FIREWALL");
+
+        if (sandwichH || sandwichV) {
+            int penalizacion = Math.max(1, jf + jc);
+            juego.getJugador().setMovimientosRestantes(
+                    juego.getJugador().getMovimientosRestantes() - penalizacion);
         }
     }
 
@@ -152,7 +189,7 @@ public class Controlador {
         int jf = juego.getJugador().getFila();
         int jc = juego.getJugador().getColumna();
         for (NodoEnergia n : juego.getNodos()) {
-            if (n.getFila() == jf && n.getColumna() == jc) {
+            if (n.getFila() == jf && n.getColumna() == jc && n.isActivo()) {
                 int bonus = (int) (juego.getMovimientosMax() * 0.10);
                 if (bonus < 1)
                     bonus = 1;
@@ -163,9 +200,10 @@ public class Controlador {
         }
     }
 
-    public Controlador(String dificultad, boolean ordenInverso) {
-        juego = new Juego(9, 14, 3, 64, ordenInverso);
+    // constructor
+    public Controlador(String dificultad, boolean ordenInverso, int filas, int columnas, int numPuertos) {
+        int movMax = filas * columnas;
+        juego = new Juego(filas, columnas, numPuertos, movMax, ordenInverso);
         juego.inicializar(dificultad);
     }
-
 }

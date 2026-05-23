@@ -56,4 +56,22 @@ public class Amenaza {
         this.columna = columna;
     }
 
+    public void moverHacia(Tablero tablero, int tf, int tc) {
+        int df = Integer.compare(tf, fila);
+        int dc = Integer.compare(tc, columna);
+        int nuevaFila = fila + df;
+        int nuevaColumna = columna + dc;
+
+        if (tablero.estaEnRango(nuevaFila, nuevaColumna)
+                && tablero.getCelda(nuevaFila, nuevaColumna).equals("VACIO")) {
+            if (tablero.getCelda(fila, columna).equals(tipo))
+                tablero.setCelda(fila, columna, "VACIO");
+            fila = nuevaFila;
+            columna = nuevaColumna;
+            tablero.setCelda(fila, columna, tipo);
+        } else {
+            mover(tablero);
+        }
+    }
+
 }
