@@ -12,6 +12,11 @@ public class PanelJuego extends JPanel {
     private Juego juego;
     private int tamCelda = 64;
 
+    private static final int HUD_HEIGHT = 40; // Altura del área de HUD debajo del tablero
+
+    private String direccionJugador = "FRENTE";
+
+    // Imágenes para los elementos del juego
     private Image imgAntivirus;
     private Image imgEscaner;
     private Image imgFirewall;
@@ -24,6 +29,8 @@ public class PanelJuego extends JPanel {
     private Image imgMarcianitoDer;
     private Image imgMarcianitIzq;
     private Image imgMarcianitAtras;
+    private Image imgPilaRecarga;
+    private Image imgPared;
 
     public PanelJuego(Juego juego) {
         this.juego = juego;
@@ -43,7 +50,8 @@ public class PanelJuego extends JPanel {
         imgMarcianitIzq = new ImageIcon(getClass().getResource("/resources/Marcianito/mirando a la izquierda.png"))
                 .getImage();
         imgMarcianitAtras = new ImageIcon(getClass().getResource("/resources/Marcianito/mirando atras.png")).getImage();
-
+        imgPilaRecarga = new ImageIcon(getClass().getResource("/resources/Partida/pila de recarga.png")).getImage();
+        imgPared = new ImageIcon(getClass().getResource("/resources/Partida/Pared.png")).getImage();
     }
 
     @Override
@@ -56,7 +64,7 @@ public class PanelJuego extends JPanel {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 int x = j * tamCelda;
-                int y = i * tamCelda;
+                int y = i * tamCelda + HUD_HEIGHT;
                 String celda = juego.getTablero().getCelda(i, j);
 
                 // fondo negro para todas las celdas
@@ -97,47 +105,56 @@ public class PanelJuego extends JPanel {
                 } else if (celda.equals("ESCANER")) {
                     g.drawImage(imgEscaner, x, y, tamCelda, tamCelda, null);
                 } else if (celda.equals("NODO")) {
-                    g.setColor(Color.ORANGE);
-                    g.fillOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
-                    g.setColor(Color.YELLOW);
-                    g.drawOval(x + 5, y + 5, tamCelda - 10, tamCelda - 10);
+                    g.drawImage(imgPilaRecarga, x, y, tamCelda, tamCelda, null);
+                } else if (celda.equals("PARED")) {
+                    g.setColor(new Color(200, 200, 200));
+                    g.fillRect(x, y, tamCelda, tamCelda);
+                    int margen = 14; // Margen para que la imagen no toque los bordes de la celda
+                    g.drawImage(imgPared, x + margen, y + margen, tamCelda - margen * 2, tamCelda - margen * 2, null);
+
                 }
             }
         }
         // Dibujar el jugador
-        g.setColor(Color.GREEN);
-        // Fondo del jugador
         int jf = juego.getJugador().getFila();
         int jc = juego.getJugador().getColumna();
-        g.setColor(Color.GREEN);
-        g.fillRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
-        g.setColor(Color.WHITE);
-        g.drawRect(jc * tamCelda + 5, jf * tamCelda + 5, tamCelda - 10, tamCelda - 10);
+        Image imgJugador;
+        if (direccionJugador.equals("DERECHA"))
+            imgJugador = imgMarcianitoDer;
+        else if (direccionJugador.equals("IZQUIERDA"))
+            imgJugador = imgMarcianitIzq;
+        else if (direccionJugador.equals("ATRAS"))
+            imgJugador = imgMarcianitAtras;
+        else
+            imgJugador = imgMarcianito;
+        g.drawImage(imgJugador, jc * tamCelda, jf * tamCelda + HUD_HEIGHT, tamCelda, tamCelda, null);
 
         // Dibujar rastro del paquete
         int[][] rastro = juego.getPaquete().getRastro();
         int cantidad = juego.getPaquete().getCantidadRastro();
 
+        // Dibujar círculos amarillos semitransparentes para cada posición del rastro
         for (int r = 0; r < cantidad; r++) {
             int rx = rastro[r][1] * tamCelda + 15;
             int ry = rastro[r][0] * tamCelda + 15;
             g.setColor(new Color(255, 255, 0, 80));
             g.fillOval(rx, ry, tamCelda - 30, tamCelda - 30);
         }
+
         // HUD
+        g.setColor(new Color(30, 30, 30));
+        g.fillRect(0, 0, getWidth(), HUD_HEIGHT);
         g.setColor(Color.WHITE);
-        g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 16));
-        g.drawString("Movimientos: " + juego.getJugador().getMovimientosRestantes(), 10,
-                juego.getTablero().getFilas() * tamCelda + 20);
-
-        // Mostrar el próximo puerto objetivo
-        int siguiente = juego.getPaquete().getPuertosVisitados() + 1;
-        if (siguiente <= juego.getPuertos().length) {
-            g.drawString("Puerto objetivo: P" + siguiente, 250, juego.getTablero().getFilas() * tamCelda + 20);
-        } else {
-            g.drawString("¡Todos los puertos visitados!", 250, juego.getTablero().getFilas() * tamCelda + 20);
+        g.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 16));
+        g.drawString("❤ " + juego.getJugador().getMovimientosRestantes() + "/" + juego.getMovimientosMax(), 15, 28);
+        g.drawString("|", 180, 28);
+        int sig = juego.getPaquete().getPuertosVisitados() + 1;
+        String puertoText = sig <= juego.getPuertos().length ? "PUERTO: P" + sig : "¡COMPLETADO!";
+        g.drawString(puertoText, 200, 28);
+        if (juego.getJugador().isModoSigilo()) {
+            g.setColor(Color.CYAN);
+            g.drawString("| SIGILO", 380, 28);
         }
-
         // Indicar si el jugador está en modo sigilo
         if (juego.getJugador().isModoSigilo()) {
             g.setColor(Color.CYAN);
@@ -152,6 +169,7 @@ public class PanelJuego extends JPanel {
             g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 36));
             g.drawString("¡MISION COMPLETADA!", 80, getHeight() / 2);
         } else if (juego.getEstado().equals(Juego.PERDIDO)) {
+            // Fondo semitransparente y mensaje de derrota
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.RED);
@@ -162,6 +180,10 @@ public class PanelJuego extends JPanel {
 
     public void actualizar() {
         repaint();
+    }
+
+    public void setDireccionJugador(String dir) {
+        this.direccionJugador = dir;
     }
 
 }

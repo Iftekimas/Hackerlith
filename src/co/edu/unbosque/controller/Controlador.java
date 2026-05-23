@@ -8,7 +8,7 @@ public class Controlador {
 
     public Controlador() {
         // Configuración inicial del juego: tablero de 8x8, 3 amenazas, 64 movimientos,
-        juego = new Juego(8, 8, 3, 64, false);
+        juego = new Juego(9, 14, 3, 64, false);
         juego.inicializar();
 
     }
@@ -42,7 +42,7 @@ public class Controlador {
 
         String celda = juego.getTablero().getCelda(nuevaFila, nuevaColumna);
 
-        if (celda.equals("FIREWALL")) {
+        if (celda.equals("FIREWALL") || celda.equals("PARED")) {
             return; // No mover si hay un firewall
         }
 
@@ -53,7 +53,8 @@ public class Controlador {
             if (!juego.getTablero().estaEnRango(paqNuevaFila, paqNuevaColumna))
                 return; // No mover si el paquete va a salir del tablero
 
-            if (juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("FIREWALL"))
+            if (juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("FIREWALL")
+                    || juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("PARED"))
                 return; // No mover si el paquete choca con un firewall
 
             juego.getPaquete().agregarRastro(nuevaFila, nuevaColumna);

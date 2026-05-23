@@ -7,6 +7,8 @@ public class PaqueteDatos {
     private int[][] rastro;
     private int cantidadRastro;
 
+    // Constructor
+
     public PaqueteDatos(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;
