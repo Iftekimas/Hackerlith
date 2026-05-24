@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Clase principal del modelo. Contiene el estado completo del juego.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Juego {
     public static final String JUGANDO = "JUGANDO";

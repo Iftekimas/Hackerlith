@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Representa la cuadrícula del juego. Guarda el estado de cada celda.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Tablero {
     private int filas;

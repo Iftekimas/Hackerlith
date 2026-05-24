@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Nodo de energía que el jugador puede recoger para recuperar movimientos.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class NodoEnergia {
     private int fila;

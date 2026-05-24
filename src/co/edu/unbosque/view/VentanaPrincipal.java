@@ -8,6 +8,10 @@ import co.edu.unbosque.model.Jugador;
 
 /**
  * Ventana principal del juego. Coordina el menú, el tablero y el audio.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class VentanaPrincipal extends JFrame {
 

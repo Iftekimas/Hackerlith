@@ -6,6 +6,10 @@ import co.edu.unbosque.model.Juego;
 
 /**
  * Panel lateral que muestra la leyenda, el objetivo y los controles del juego.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class PanelInfo extends JPanel {
 

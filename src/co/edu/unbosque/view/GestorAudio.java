@@ -7,6 +7,10 @@ import java.net.URL;
 
 /**
  * Maneja la reproducción de audio del juego.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class GestorAudio {
 

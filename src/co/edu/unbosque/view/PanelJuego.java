@@ -12,6 +12,10 @@ import javax.swing.BorderFactory;
 
 /**
  * Panel que dibuja el tablero, el jugador, las amenazas y el HUD durante la partida.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class PanelJuego extends JPanel {
 

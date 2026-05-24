@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Representa el paquete de datos que el jugador debe empujar por los puertos.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class PaqueteDatos {
     private int fila;

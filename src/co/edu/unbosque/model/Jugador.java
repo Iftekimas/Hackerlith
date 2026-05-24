@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Representa al jugador dentro del tablero.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Jugador {
 

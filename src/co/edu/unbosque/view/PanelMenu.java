@@ -5,6 +5,10 @@ import javax.swing.*;
 
 /**
  * Panel del menú principal. Permite configurar dificultad, tamaño y skin antes de jugar.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class PanelMenu extends JPanel {
 

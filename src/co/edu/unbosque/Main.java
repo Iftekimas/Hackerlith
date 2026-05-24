@@ -4,6 +4,10 @@ import co.edu.unbosque.view.VentanaPrincipal;
 
 /**
  * Clase principal que inicia la aplicación Hackerlith.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Main {
 

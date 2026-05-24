@@ -2,6 +2,10 @@ package co.edu.unbosque.model;
 
 /**
  * Representa un puerto de enlace que el paquete debe visitar.
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Puerto {
 

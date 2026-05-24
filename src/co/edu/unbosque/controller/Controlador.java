@@ -3,7 +3,13 @@ package co.edu.unbosque.controller;
 import co.edu.unbosque.model.*;
 
 /**
- * Controlador del juego. Procesa los movimientos del jugador y aplica las reglas.
+ * Controlador del juego. Procesa los movimientos del jugador y aplica las
+ * reglas.
+ * 
+ * @author Santiago Forero Garibello
+ * @author Alejandra Fernandez Espinosa
+ * @author Michael Andres Sanchez
+ * @version 1.0
  */
 public class Controlador {
 
@@ -17,7 +23,9 @@ public class Controlador {
     }
 
     /**
-     * Mueve al jugador en la dirección indicada y aplica todas las reglas del turno.
+     * Mueve al jugador en la dirección indicada y aplica todas las reglas del
+     * turno.
+     * 
      * @param direccion W (arriba), S (abajo), A (izquierda), D (derecha)
      */
     public void moverJugador(String direccion) {
@@ -190,7 +198,8 @@ public class Controlador {
 
         if (sandwichH || sandwichV) {
             int penalizacion = jf + jc;
-            if (penalizacion < 1) penalizacion = 1;
+            if (penalizacion < 1)
+                penalizacion = 1;
             juego.getJugador().setMovimientosRestantes(
                     juego.getJugador().getMovimientosRestantes() - penalizacion);
         }
@@ -213,11 +222,12 @@ public class Controlador {
 
     /**
      * Crea el controlador e inicializa una nueva partida.
-     * @param dificultad nivel de dificultad: BAJA, MEDIA o ALTA
+     * 
+     * @param dificultad   nivel de dificultad: BAJA, MEDIA o ALTA
      * @param ordenInverso si los puertos se visitan en orden inverso
-     * @param filas filas del tablero
-     * @param columnas columnas del tablero
-     * @param numPuertos cantidad de puertos
+     * @param filas        filas del tablero
+     * @param columnas     columnas del tablero
+     * @param numPuertos   cantidad de puertos
      */
     public Controlador(String dificultad, boolean ordenInverso, int filas, int columnas, int numPuertos) {
         int movMax = filas * columnas;
