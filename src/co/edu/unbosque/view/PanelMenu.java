@@ -3,6 +3,9 @@ package co.edu.unbosque.view;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Panel del menú principal. Permite configurar dificultad, tamaño y skin antes de jugar.
+ */
 public class PanelMenu extends JPanel {
 
     private JButton btnNuevaPartida, btnSalir;
@@ -55,7 +58,6 @@ public class PanelMenu extends JPanel {
         marcarDificultad("MEDIA");
 
         btnOrden.addActionListener(e -> {
-            add(btnOrden);
             ordenInverso = !ordenInverso;
             btnOrden.setText(ordenInverso ? "ORDEN: INVERSO" : "ORDEN: NORMAL");
             btnOrden.setForeground(ordenInverso ? Color.YELLOW : Color.WHITE);

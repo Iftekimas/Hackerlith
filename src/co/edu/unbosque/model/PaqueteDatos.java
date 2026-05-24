@@ -1,5 +1,8 @@
 package co.edu.unbosque.model;
 
+/**
+ * Representa el paquete de datos que el jugador debe empujar por los puertos.
+ */
 public class PaqueteDatos {
     private int fila;
     private int columna;
@@ -9,6 +12,11 @@ public class PaqueteDatos {
 
     // Constructor
 
+    /**
+     * Crea el paquete de datos en la posición inicial dada.
+     * @param fila fila inicial del paquete
+     * @param columna columna inicial del paquete
+     */
     public PaqueteDatos(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;

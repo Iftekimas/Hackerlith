@@ -1,29 +1,42 @@
 package co.edu.unbosque.model;
 
+/**
+ * Representa una amenaza del juego (Antivirus o Escaner) que se mueve por el tablero.
+ */
 public class Amenaza {
 
     private int fila;
     private int columna;
     private String tipo;
 
-    // Constructor
+    /**
+     * Crea una amenaza en la posición dada.
+     * @param fila fila inicial
+     * @param columna columna inicial
+     * @param tipo tipo de amenaza: ANTIVIRUS o ESCANER
+     */
     public Amenaza(int fila, int columna, String tipo) {
         this.fila = fila;
         this.columna = columna;
         this.tipo = tipo;
     }
 
-    // Método para mover la amenaza aleatoriamente
+    /**
+     * Mueve la amenaza a una celda vacía aleatoria adyacente.
+     * @param tablero tablero del juego
+     */
     public void mover(Tablero tablero) {
-        int[] dFilas = { -1, 1, 0, 0 };
-        int[] dColumnas = { 0, 0, -1, 1 };
-
         if (tipo.equals("FIREWALL"))
             return;
 
         int dir = (int) (Math.random() * 4);
-        int nuevaFila = fila + dFilas[dir];
-        int nuevaColumna = columna + dColumnas[dir];
+        int nuevaFila = fila;
+        int nuevaColumna = columna;
+
+        if (dir == 0) nuevaFila = fila - 1;       // arriba
+        else if (dir == 1) nuevaFila = fila + 1;  // abajo
+        else if (dir == 2) nuevaColumna = columna - 1; // izquierda
+        else nuevaColumna = columna + 1;           // derecha
 
         if (tablero.estaEnRango(nuevaFila, nuevaColumna)
                 && tablero.getCelda(nuevaFila, nuevaColumna).equals("VACIO")) {
@@ -54,24 +67,6 @@ public class Amenaza {
 
     public void setColumna(int columna) {
         this.columna = columna;
-    }
-
-    public void moverHacia(Tablero tablero, int tf, int tc) {
-        int df = Integer.compare(tf, fila);
-        int dc = Integer.compare(tc, columna);
-        int nuevaFila = fila + df;
-        int nuevaColumna = columna + dc;
-
-        if (tablero.estaEnRango(nuevaFila, nuevaColumna)
-                && tablero.getCelda(nuevaFila, nuevaColumna).equals("VACIO")) {
-            if (tablero.getCelda(fila, columna).equals(tipo))
-                tablero.setCelda(fila, columna, "VACIO");
-            fila = nuevaFila;
-            columna = nuevaColumna;
-            tablero.setCelda(fila, columna, tipo);
-        } else {
-            mover(tablero);
-        }
     }
 
 }

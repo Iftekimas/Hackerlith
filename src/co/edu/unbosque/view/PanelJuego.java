@@ -9,8 +9,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.BorderFactory;
-import java.awt.FontMetrics;
 
+/**
+ * Panel que dibuja el tablero, el jugador, las amenazas y el HUD durante la partida.
+ */
 public class PanelJuego extends JPanel {
 
     private Juego juego;
@@ -39,10 +41,17 @@ public class PanelJuego extends JPanel {
     private Image imgComputadora;
     private Image imgBandera;
     private JButton btnVolverMenu;
-    private Runnable onVolverMenu;
+    private VentanaPrincipal ventana;
 
-    public PanelJuego(Juego juego, String skin) {
+    /**
+     * Crea el panel de juego cargando las imágenes según el skin elegido.
+     * @param juego estado del juego a dibujar
+     * @param skin nombre del skin del personaje: MARCIANITO o TITA
+     * @param ventana referencia a la ventana principal para volver al menú
+     */
+    public PanelJuego(Juego juego, String skin, VentanaPrincipal ventana) {
         this.juego = juego;
+        this.ventana = ventana;
         setBackground(Color.BLACK);
         // Cargar imágenes
         imgAntivirus = new ImageIcon(getClass().getResource("/resources/Partida/Antivirus proactivo.png")).getImage();
@@ -53,10 +62,8 @@ public class PanelJuego extends JPanel {
         imgPuerto1 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 1.png")).getImage();
         imgPuerto2 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 2.png")).getImage();
         imgPuerto3 = new ImageIcon(getClass().getResource("/resources/Partida/puerto 3.png")).getImage();
-        java.net.URL url4 = getClass().getResource("/resources/Partida/puerto 4.png");
-        imgPuerto4 = (url4 != null) ? new ImageIcon(url4).getImage() : imgPuerto3;
-        java.net.URL url5 = getClass().getResource("/resources/Partida/puerto 5.png");
-        imgPuerto5 = (url5 != null) ? new ImageIcon(url5).getImage() : imgPuerto3;
+        imgPuerto4 = new ImageIcon(getClass().getResource("/resources/Partida/Puerto_4.png")).getImage();
+        imgPuerto5 = new ImageIcon(getClass().getResource("/resources/Partida/Puerto_5.png")).getImage();
         imgComputadora = new ImageIcon(getClass().getResource("/resources/Nivel completado/Compu feli.png")).getImage();
         imgBandera = new ImageIcon(getClass().getResource("/resources/Nivel completado/Banderita.png")).getImage();
 
@@ -68,10 +75,7 @@ public class PanelJuego extends JPanel {
         btnVolverMenu.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 80)));
         btnVolverMenu.setFocusPainted(false);
         btnVolverMenu.setVisible(false);
-        btnVolverMenu.addActionListener(e -> {
-            if (onVolverMenu != null)
-                onVolverMenu.run();
-        });
+        btnVolverMenu.addActionListener(e -> ventana.volverAlMenu());
         add(btnVolverMenu);
 
         if (skin.equals("TITA")) {
@@ -100,13 +104,19 @@ public class PanelJuego extends JPanel {
 
         int filas = juego.getTablero().getFilas();
         int columnas = juego.getTablero().getColumnas();
-        int tamCelda = Math.min(64, Math.min(getWidth() / columnas, (getHeight() - HUD_HEIGHT) / filas));
+        int tamCelda = getWidth() / columnas;
+        if ((getHeight() - HUD_HEIGHT) / filas < tamCelda)
+            tamCelda = (getHeight() - HUD_HEIGHT) / filas;
+        if (tamCelda > 64)
+            tamCelda = 64;
+
         int gridW = columnas * tamCelda;
         int gridH = filas * tamCelda;
 
-        // Centrar la cuadrícula en el panel
-        int offsetX = Math.max(0, (getWidth() - gridW) / 2);
-        int offsetY = HUD_HEIGHT + Math.max(0, (getHeight() - HUD_HEIGHT - gridH) / 2);
+        int offsetX = (getWidth() - gridW) / 2;
+        if (offsetX < 0) offsetX = 0;
+        int offsetY = HUD_HEIGHT + (getHeight() - HUD_HEIGHT - gridH) / 2;
+        if (offsetY < HUD_HEIGHT) offsetY = HUD_HEIGHT;
 
         // Fondo negro
         g.setColor(Color.BLACK);
@@ -198,8 +208,16 @@ public class PanelJuego extends JPanel {
         g.drawString("❤ " + juego.getJugador().getMovimientosRestantes() + "/" + juego.getMovimientosMax(), 15, 28);
         g.drawString("|", 180, 28);
         int visitados = juego.getPaquete().getPuertosVisitados();
-        int sig = juego.isOrdenInverso() ? (juego.getPuertos().length - visitados) : (visitados + 1);
-        String puertoText = visitados >= juego.getPuertos().length ? "¡COMPLETADO!" : "PUERTO: P" + sig;
+        int sig;
+        if (juego.isOrdenInverso())
+            sig = juego.getPuertos().length - visitados;
+        else
+            sig = visitados + 1;
+        String puertoText;
+        if (visitados >= juego.getPuertos().length)
+            puertoText = "¡COMPLETADO!";
+        else
+            puertoText = "PUERTO: P" + sig;
         g.drawString(puertoText, 200, 28);
         if (juego.getJugador().isModoSigilo()) {
             g.setColor(Color.CYAN);
@@ -220,21 +238,20 @@ public class PanelJuego extends JPanel {
 
             g.setColor(Color.WHITE);
             g.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 20));
-            FontMetrics fm = g.getFontMetrics();
-            String t1 = "¡MISIÓN COMPLETADA!";
-            g.drawString(t1, px + (pw - fm.stringWidth(t1)) / 2, py + 38);
+            g.drawString("¡MISIÓN COMPLETADA!", px + 135, py + 38);
 
-            int is = 72, gap = 24, totalW = 3 * is + 2 * gap;
-            int ix = px + (pw - totalW) / 2, iy = py + 55;
+            int is = 72;
+            int gap = 24;
+            int totalW = 3 * is + 2 * gap;
+            int ix = px + (pw - totalW) / 2;
+            int iy = py + 55;
             g.drawImage(imgMarcianito, ix, iy, is, is, null);
             g.drawImage(imgComputadora, ix + is + gap, iy, is, is, null);
             g.drawImage(imgBandera, ix + 2 * (is + gap), iy, is, is, null);
 
             g.setColor(new Color(170, 170, 170));
             g.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-            String sub = "Has visitado todos los puertos en el orden correcto.";
-            fm = g.getFontMetrics();
-            g.drawString(sub, px + (pw - fm.stringWidth(sub)) / 2, iy + is + 18);
+            g.drawString("Has visitado todos los puertos en el orden correcto.", px + 65, iy + is + 18);
 
             int movUsados = juego.getMovimientosMax() - juego.getJugador().getMovimientosRestantes();
             g.setColor(Color.WHITE);
@@ -253,18 +270,14 @@ public class PanelJuego extends JPanel {
 
             g.setColor(Color.RED);
             g.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 22));
-            FontMetrics fm = g.getFontMetrics();
-            String t2 = "MISIÓN FALLIDA";
-            g.drawString(t2, px + (pw - fm.stringWidth(t2)) / 2, py + 40);
+            g.drawString("MISIÓN FALLIDA", px + 118, py + 40);
 
             int is = 72;
             g.drawImage(imgDead, px + (pw - is) / 2, py + 55, is, is, null);
 
             g.setColor(new Color(170, 170, 170));
             g.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-            String msg = "Has sido detectado o te quedaste sin movimientos.";
-            fm = g.getFontMetrics();
-            g.drawString(msg, px + (pw - fm.stringWidth(msg)) / 2, py + 150);
+            g.drawString("Has sido detectado o te quedaste sin movimientos.", px + 35, py + 150);
 
             int movUsados = juego.getMovimientosMax() - juego.getJugador().getMovimientosRestantes();
             g.setColor(Color.WHITE);
@@ -285,10 +298,6 @@ public class PanelJuego extends JPanel {
 
     public void setDireccionJugador(String dir) {
         this.direccionJugador = dir;
-    }
-
-    public void setOnVolverMenu(Runnable r) {
-        this.onVolverMenu = r;
     }
 
 }
