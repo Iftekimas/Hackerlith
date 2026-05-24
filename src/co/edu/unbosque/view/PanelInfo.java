@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import co.edu.unbosque.model.Juego;
 
+/**
+ * Panel lateral que muestra la leyenda, el objetivo y los controles del juego.
+ */
 public class PanelInfo extends JPanel {
 
     private Juego juego;
@@ -94,6 +97,11 @@ public class PanelInfo extends JPanel {
         }
     }
 
+    /**
+     * Crea el panel de información lateral.
+     * @param juego estado del juego para mostrar el progreso
+     * @param dificultad dificultad de la partida para mostrar en pantalla
+     */
     public PanelInfo(Juego juego, String dificultad) {
         this.juego = juego;
         this.dificultad = dificultad;

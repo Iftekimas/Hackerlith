@@ -1,5 +1,8 @@
 package co.edu.unbosque.model;
 
+/**
+ * Representa al jugador dentro del tablero.
+ */
 public class Jugador {
 
     private int fila;
@@ -8,6 +11,12 @@ public class Jugador {
     private boolean modoSigilo;
     private boolean sigiloUsado = false;
 
+    /**
+     * Crea un jugador en la posición dada con los movimientos iniciales.
+     * @param fila fila inicial
+     * @param columna columna inicial
+     * @param movimientosRestantes movimientos disponibles al inicio
+     */
     public Jugador(int fila, int columna, int movimientosRestantes) {
         this.fila = fila;
         this.columna = columna;

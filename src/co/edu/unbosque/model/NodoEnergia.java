@@ -1,10 +1,18 @@
 package co.edu.unbosque.model;
 
+/**
+ * Nodo de energía que el jugador puede recoger para recuperar movimientos.
+ */
 public class NodoEnergia {
     private int fila;
     private int columna;
     private boolean activo;
 
+    /**
+     * Crea un nodo de energía activo en la posición dada.
+     * @param fila fila del nodo
+     * @param columna columna del nodo
+     */
     public NodoEnergia(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;

@@ -2,6 +2,9 @@ package co.edu.unbosque.controller;
 
 import co.edu.unbosque.model.*;
 
+/**
+ * Controlador del juego. Procesa los movimientos del jugador y aplica las reglas.
+ */
 public class Controlador {
 
     private Juego juego;
@@ -13,6 +16,10 @@ public class Controlador {
         return juego;
     }
 
+    /**
+     * Mueve al jugador en la dirección indicada y aplica todas las reglas del turno.
+     * @param direccion W (arriba), S (abajo), A (izquierda), D (derecha)
+     */
     public void moverJugador(String direccion) {
 
         if (!juego.getEstado().equals(Juego.JUGANDO)) {
@@ -29,68 +36,68 @@ public class Controlador {
         else if (direccion.equals("D"))
             dc = 1;
 
-        int nuevaFila = juego.getJugador().getFila() + df;
-        int nuevaColumna = juego.getJugador().getColumna() + dc;
+        int nf = juego.getJugador().getFila() + df;
+        int nc = juego.getJugador().getColumna() + dc;
 
-        if (!juego.getTablero().estaEnRango(nuevaFila, nuevaColumna)) {
+        if (!juego.getTablero().estaEnRango(nf, nc)) {
             return; // No mover si está fuera de rango
         }
 
-        String celda = juego.getTablero().getCelda(nuevaFila, nuevaColumna);
+        String celda = juego.getTablero().getCelda(nf, nc);
 
         if (celda.equals("FIREWALL") || celda.equals("PARED")) {
             return; // No mover si hay un firewall
         }
 
         if (celda.equals("PAQUETE")) {
-            int paqNuevaFila = nuevaFila + df;
-            int paqNuevaColumna = nuevaColumna + dc;
+            int pf = nf + df;
+            int pc = nc + dc;
 
-            if (!juego.getTablero().estaEnRango(paqNuevaFila, paqNuevaColumna))
+            if (!juego.getTablero().estaEnRango(pf, pc))
                 return; // No mover si el paquete va a salir del tablero
 
-            if (juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("FIREWALL")
-                    || juego.getTablero().getCelda(paqNuevaFila, paqNuevaColumna).equals("PARED"))
+            if (juego.getTablero().getCelda(pf, pc).equals("FIREWALL")
+                    || juego.getTablero().getCelda(pf, pc).equals("PARED"))
                 return; // No mover si el paquete choca con un firewall
 
-            juego.getPaquete().agregarRastro(nuevaFila, nuevaColumna);
+            juego.getPaquete().agregarRastro(nf, nc);
 
             // Mover el paquete
             String celdaAnterior = "VACIO";
             for (Puerto p : juego.getPuertos()) {
-                if (p.getFila() == nuevaFila && p.getColumna() == nuevaColumna && !p.isVisitado()) {
+                if (p.getFila() == nf && p.getColumna() == nc && !p.isVisitado()) {
                     celdaAnterior = "PUERTO";
                     break;
                 }
             }
-            juego.getTablero().setCelda(nuevaFila, nuevaColumna, celdaAnterior);
-            juego.getPaquete().setFila(paqNuevaFila);
-            juego.getPaquete().setColumna(paqNuevaColumna);
-            juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
+            juego.getTablero().setCelda(nf, nc, celdaAnterior);
+            juego.getPaquete().setFila(pf);
+            juego.getPaquete().setColumna(pc);
+            juego.getTablero().setCelda(pf, pc, "PAQUETE");
 
             // Verificar si el paquete ha llegado a un puerto
             for (Puerto p : juego.getPuertos()) {
                 int numEsperado = juego.isOrdenInverso()
                         ? (juego.getPuertos().length - juego.getPaquete().getPuertosVisitados())
                         : (juego.getPaquete().getPuertosVisitados() + 1);
-                if (p.getFila() == paqNuevaFila && p.getColumna() == paqNuevaColumna
+                if (p.getFila() == pf && p.getColumna() == pc
                         && !p.isVisitado()
                         && p.getNumero() == numEsperado) {
                     p.setVisitado(true);
                     juego.getPaquete().visitarPuerto();
-                    juego.getTablero().setCelda(paqNuevaFila, paqNuevaColumna, "PAQUETE");
+                    juego.getTablero().setCelda(pf, pc, "PAQUETE");
                     break;
                 }
             }
 
         }
         // Mover al jugador
-        juego.getJugador().setFila(nuevaFila);
-        juego.getJugador().setColumna(nuevaColumna);
+        juego.getJugador().setFila(nf);
+        juego.getJugador().setColumna(nc);
 
         turno++;
         historial.add("Turno " + turno + " | Dir: " + direccion
-                + " | Pos: (" + nuevaFila + "," + nuevaColumna + ")"
+                + " | Pos: (" + nf + "," + nc + ")"
                 + " | Movimientos restantes: " + (juego.getJugador().getMovimientosRestantes() - 1)
                 + " | Puertos visitados: " + juego.getPaquete().getPuertosVisitados());
 
@@ -146,6 +153,9 @@ public class Controlador {
         }
     }
 
+    /**
+     * Guarda el historial de movimientos de la partida en un archivo de texto.
+     */
     public void guardarLog() {
         try {
             java.io.FileWriter fw = new java.io.FileWriter("log_partida.txt");
@@ -179,7 +189,8 @@ public class Controlador {
                 && t.getCelda(jf + 1, jc).equals("FIREWALL");
 
         if (sandwichH || sandwichV) {
-            int penalizacion = Math.max(1, jf + jc);
+            int penalizacion = jf + jc;
+            if (penalizacion < 1) penalizacion = 1;
             juego.getJugador().setMovimientosRestantes(
                     juego.getJugador().getMovimientosRestantes() - penalizacion);
         }
@@ -200,7 +211,14 @@ public class Controlador {
         }
     }
 
-    // constructor
+    /**
+     * Crea el controlador e inicializa una nueva partida.
+     * @param dificultad nivel de dificultad: BAJA, MEDIA o ALTA
+     * @param ordenInverso si los puertos se visitan en orden inverso
+     * @param filas filas del tablero
+     * @param columnas columnas del tablero
+     * @param numPuertos cantidad de puertos
+     */
     public Controlador(String dificultad, boolean ordenInverso, int filas, int columnas, int numPuertos) {
         int movMax = filas * columnas;
         juego = new Juego(filas, columnas, numPuertos, movMax, ordenInverso);

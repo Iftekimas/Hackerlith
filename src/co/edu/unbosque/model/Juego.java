@@ -1,5 +1,8 @@
 package co.edu.unbosque.model;
 
+/**
+ * Clase principal del modelo. Contiene el estado completo del juego.
+ */
 public class Juego {
     public static final String JUGANDO = "JUGANDO";
     public static final String GANADO = "GANADO";
@@ -16,7 +19,14 @@ public class Juego {
     private boolean ordenInverso;
     private String dificultad;
 
-    // Constructor del juego
+    /**
+     * Crea una nueva partida con las dimensiones y parámetros dados.
+     * @param filas filas del tablero
+     * @param columnas columnas del tablero
+     * @param numPuertos cantidad de puertos a visitar
+     * @param movimientosMax movimientos máximos del jugador
+     * @param ordenInverso si los puertos deben visitarse en orden inverso
+     */
     public Juego(int filas, int columnas, int numPuertos, int movimientosMax, boolean ordenInverso) {
         this.movimientosMax = movimientosMax;
         this.ordenInverso = ordenInverso;
@@ -29,7 +39,10 @@ public class Juego {
         this.nodos = new NodoEnergia[0];
     }
 
-    // Verifica si el jugador ha ganado
+    /**
+     * Verifica si el jugador ya visitó todos los puertos.
+     * @return true si ganó
+     */
     public boolean verificarVictoria() {
         if (paquete.getPuertosVisitados() >= puertos.length) {
             estado = GANADO;
@@ -38,7 +51,10 @@ public class Juego {
         return false;
     }
 
-    // Verifica si el jugador ha perdido
+    /**
+     * Verifica si el jugador se quedó sin movimientos.
+     * @return true si perdió
+     */
     public boolean verificarDerrota() {
         // Verificar colisión con amenazas
         if (jugador.getMovimientosRestantes() <= 0) {
@@ -48,7 +64,9 @@ public class Juego {
         return false;
     }
 
-    // Mueve las amenazas
+    /**
+     * Mueve todas las amenazas del tablero un paso aleatorio.
+     */
     public void moverAmenazas() {
         for (int i = 0; i < amenazas.length; i++) {
             if (amenazas[i] != null)
@@ -109,7 +127,10 @@ public class Juego {
         this.nodos = nodos;
     }
 
-    // iniciliza el juego
+    /**
+     * Coloca todos los elementos en el tablero según la dificultad elegida.
+     * @param dificultad nivel de dificultad: BAJA, MEDIA o ALTA
+     */
     public void inicializar(String dificultad) {
         this.dificultad = dificultad;
         int filas = tablero.getFilas();
@@ -153,25 +174,25 @@ public class Juego {
         tablero.setCelda(posJug[0], posJug[1], "JUG");
 
         // Calcular cuántos firewalls colocar según dificultad y tamaño
-        int interiorCells = (filas - 2) * (columnas - 2);
+        int celdasInternas = (filas - 2) * (columnas - 2);
         int numAmenazas = 1;
         if (dificultad.equals("MEDIA")) numAmenazas = 2;
         if (dificultad.equals("ALTA")) numAmenazas = 3;
-        int elementosBase = 2 + puertos.length + numAmenazas + 2;
+        int ocupadas = 2 + puertos.length + numAmenazas + 2;
 
-        int desiredFirewalls = 0;
+        int cantFW = 0;
         if (dificultad.equals("MEDIA")) {
-            desiredFirewalls = interiorCells / 12;
-            if (desiredFirewalls < 2) desiredFirewalls = 2;
+            cantFW = celdasInternas / 12;
+            if (cantFW < 2) cantFW = 2;
         } else if (dificultad.equals("ALTA")) {
-            desiredFirewalls = interiorCells / 8;
-            if (desiredFirewalls < 4) desiredFirewalls = 4;
+            cantFW = celdasInternas / 8;
+            if (cantFW < 4) cantFW = 4;
         }
 
-        int maxFirewalls = interiorCells - elementosBase - 2;
-        if (maxFirewalls < 0) maxFirewalls = 0;
-        int numFirewalls = desiredFirewalls;
-        if (numFirewalls > maxFirewalls) numFirewalls = maxFirewalls;
+        int maxFW = celdasInternas - ocupadas - 2;
+        if (maxFW < 0) maxFW = 0;
+        int totalFW = cantFW;
+        if (totalFW > maxFW) totalFW = maxFW;
 
         // Amenazas según dificultad
         if (dificultad.equals("BAJA")) {
@@ -198,7 +219,7 @@ public class Juego {
         }
 
         // Firewalls — no se coloca si está pegado a un puerto, paquete o jugador
-        for (int i = 0; i < numFirewalls; i++) {
+        for (int i = 0; i < totalFW; i++) {
             int[] pos = posAleatoria(rnd);
             if (fireWallPermitido(pos[0], pos[1])) {
                 tablero.setCelda(pos[0], pos[1], "FIREWALL");
@@ -211,16 +232,25 @@ public class Juego {
 
     // Verifica que el firewall no quede pegado a un puerto, paquete o jugador
     private boolean fireWallPermitido(int f, int c) {
-        int[] df = { -1, 1, 0, 0 };
-        int[] dc = { 0, 0, -1, 1 };
-        for (int i = 0; i < 4; i++) {
-            int nf = f + df[i];
-            int nc = c + dc[i];
-            if (!tablero.estaEnRango(nf, nc)) continue;
-            String celda = tablero.getCelda(nf, nc);
-            if (celda.equals("PUERTO") || celda.equals("PAQUETE") || celda.equals("JUG")) {
-                return false;
-            }
+        // Arriba
+        if (tablero.estaEnRango(f - 1, c)) {
+            String celda = tablero.getCelda(f - 1, c);
+            if (celda.equals("PUERTO") || celda.equals("PAQUETE") || celda.equals("JUG")) return false;
+        }
+        // Abajo
+        if (tablero.estaEnRango(f + 1, c)) {
+            String celda = tablero.getCelda(f + 1, c);
+            if (celda.equals("PUERTO") || celda.equals("PAQUETE") || celda.equals("JUG")) return false;
+        }
+        // Izquierda
+        if (tablero.estaEnRango(f, c - 1)) {
+            String celda = tablero.getCelda(f, c - 1);
+            if (celda.equals("PUERTO") || celda.equals("PAQUETE") || celda.equals("JUG")) return false;
+        }
+        // Derecha
+        if (tablero.estaEnRango(f, c + 1)) {
+            String celda = tablero.getCelda(f, c + 1);
+            if (celda.equals("PUERTO") || celda.equals("PAQUETE") || celda.equals("JUG")) return false;
         }
         return true;
     }
@@ -228,43 +258,32 @@ public class Juego {
     private int[] posAleatoria(java.util.Random rnd) {
         int filas = tablero.getFilas();
         int columnas = tablero.getColumnas();
-        int f, c;
-        int intentos = 0;
-        do {
+        int f = 1, c = 1;
+        for (int i = 0; i < 1000; i++) {
             f = 1 + rnd.nextInt(filas - 2);
             c = 1 + rnd.nextInt(columnas - 2);
-            intentos++;
-        } while (!tablero.getCelda(f, c).equals("VACIO") && intentos < 1000);
-        return new int[] { f, c };
-    }
-
-    // Coloca el paquete con margen de paredes Y al menos 2 vecinos libres para ser empujado
-    private int[] posAleatoriaSegura(java.util.Random rnd) {
-        int filas = tablero.getFilas();
-        int columnas = tablero.getColumnas();
-        int f = 2, c = 2;
-        int rangoF = filas - 4;
-        if (rangoF < 1) rangoF = 1;
-        int rangoC = columnas - 4;
-        if (rangoC < 1) rangoC = 1;
-        for (int intentos = 0; intentos < 1000; intentos++) {
-            f = 2 + rnd.nextInt(rangoF);
-            c = 2 + rnd.nextInt(rangoC);
-            if (!tablero.getCelda(f, c).equals("VACIO")) continue;
-            int libres = 0;
-            if (celdaLibre(f - 1, c)) libres++;
-            if (celdaLibre(f + 1, c)) libres++;
-            if (celdaLibre(f, c - 1)) libres++;
-            if (celdaLibre(f, c + 1)) libres++;
-            if (libres >= 2) break;
+            if (tablero.getCelda(f, c).equals("VACIO")) break;
         }
         return new int[] { f, c };
     }
 
-    private boolean celdaLibre(int f, int c) {
-        if (!tablero.estaEnRango(f, c)) return false;
-        String celda = tablero.getCelda(f, c);
-        return !celda.equals("PARED") && !celda.equals("FIREWALL");
+    // Coloca el paquete con margen de paredes para que no quede atrapado en una esquina
+    private int[] posAleatoriaSegura(java.util.Random rnd) {
+        int filas = tablero.getFilas();
+        int columnas = tablero.getColumnas();
+        int mf = filas - 4;
+        int mc = columnas - 4;
+        if (mf < 1) mf = 1;
+        if (mc < 1) mc = 1;
+        int f = 2, c = 2;
+        for (int i = 0; i < 1000; i++) {
+            f = 2 + rnd.nextInt(mf);
+            c = 2 + rnd.nextInt(mc);
+            if (tablero.getCelda(f, c).equals("VACIO")) {
+                break;
+            }
+        }
+        return new int[] { f, c };
     }
 
     public String getDificultad() {

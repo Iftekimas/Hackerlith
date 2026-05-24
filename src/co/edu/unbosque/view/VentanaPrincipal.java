@@ -6,6 +6,9 @@ import java.awt.event.*;
 import co.edu.unbosque.controller.Controlador;
 import co.edu.unbosque.model.Jugador;
 
+/**
+ * Ventana principal del juego. Coordina el menú, el tablero y el audio.
+ */
 public class VentanaPrincipal extends JFrame {
 
     private CardLayout cardLayout;
@@ -76,8 +79,7 @@ public class VentanaPrincipal extends JFrame {
 
     private void iniciarJuego() {
         controlador = new Controlador(panelMenu.getDificultad(), panelMenu.isOrdenInverso(), panelMenu.getFilas(), panelMenu.getColumnas(), panelMenu.getNumPuertos());
-        panelJuego = new PanelJuego(controlador.getJuego(), panelMenu.getSkin());
-        panelJuego.setOnVolverMenu(() -> volverAlMenu());
+        panelJuego = new PanelJuego(controlador.getJuego(), panelMenu.getSkin(), this);
 
         audio.reproducir("/resources/Audio/Intro 2.wav", true);
 
@@ -170,7 +172,7 @@ public class VentanaPrincipal extends JFrame {
         iniciarJuego();
     }
 
-    private void volverAlMenu() {
+    public void volverAlMenu() {
         audio.reproducir("/resources/Audio/Intro 1.wav", true);
 
         contenedor.remove(panelJuegoCompleto);
