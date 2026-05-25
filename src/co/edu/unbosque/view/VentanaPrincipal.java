@@ -8,6 +8,7 @@ import co.edu.unbosque.model.Jugador;
 
 /**
  * Ventana principal del juego. Coordina el menú, el tablero y el audio.
+ * 
  * @author Santiago Forero Garibello
  * @author Alejandra Fernandez Espinosa
  * @author Michael Andres Sanchez
@@ -76,31 +77,23 @@ public class VentanaPrincipal extends JFrame {
 
         setFocusable(true);
         setVisible(true);
-        audio = new GestorAudio(); // ← agregar aquí
+        audio = new GestorAudio();
         SwingUtilities.invokeLater(() -> audio.reproducir("/resources/Audio/Intro 1.wav", true));
 
     }
 
     private void iniciarJuego() {
-        controlador = new Controlador(panelMenu.getDificultad(), panelMenu.isOrdenInverso(), panelMenu.getFilas(), panelMenu.getColumnas(), panelMenu.getNumPuertos());
+        controlador = new Controlador(panelMenu.getDificultad(), panelMenu.isOrdenInverso(), panelMenu.getFilas(),
+                panelMenu.getColumnas(), panelMenu.getNumPuertos());
         panelJuego = new PanelJuego(controlador.getJuego(), panelMenu.getSkin(), this);
 
-        audio.reproducir("/resources/Audio/Intro 2.wav", true);
-
-        panelJuegoCompleto = new JPanel(new BorderLayout());
-        panelJuegoCompleto.add(panelJuego, BorderLayout.CENTER);
-        panelJuegoCompleto.add(new PanelInfo(controlador.getJuego(), panelMenu.getDificultad()), BorderLayout.EAST);
-
         panelJuegoCompleto = new JPanel(new BorderLayout());
         panelJuegoCompleto.add(panelJuego, BorderLayout.CENTER);
         panelJuegoCompleto.add(new PanelInfo(controlador.getJuego(), panelMenu.getDificultad()), BorderLayout.EAST);
 
         contenedor.add(panelJuegoCompleto, "JUEGO");
         cardLayout.show(contenedor, "JUEGO");
-        requestFocusInWindow();
 
-        contenedor.add(panelJuegoCompleto, "JUEGO");
-        cardLayout.show(contenedor, "JUEGO");
         if (panelMenu.getDificultad().equals("ALTA")) {
             audio.reproducir("/resources/Audio/Gamelay.wav", true);
         } else {
@@ -128,11 +121,11 @@ public class VentanaPrincipal extends JFrame {
         titulo.setBounds(0, 20, 280, 30);
         dialogo.add(titulo);
 
-        JButton btnContinuar    = crearBotonDialogo("CONTINUAR");
-        JButton btnReiniciar    = crearBotonDialogo("REINICIAR NIVEL");
-        JButton btnObjetivos    = crearBotonDialogo("VER OBJETIVOS");
+        JButton btnContinuar = crearBotonDialogo("CONTINUAR");
+        JButton btnReiniciar = crearBotonDialogo("REINICIAR NIVEL");
+        JButton btnObjetivos = crearBotonDialogo("VER OBJETIVOS");
         JButton btnInstrucciones = crearBotonDialogo("INSTRUCCIONES  (-5 MOV)");
-        JButton btnMenu         = crearBotonDialogo("VOLVER AL MENÚ");
+        JButton btnMenu = crearBotonDialogo("VOLVER AL MENÚ");
 
         btnContinuar.setBounds(40, 65, 200, 36);
         btnReiniciar.setBounds(40, 110, 200, 36);
@@ -190,14 +183,16 @@ public class VentanaPrincipal extends JFrame {
         int penalizacion = 5;
         int actuales = controlador.getJuego().getJugador().getMovimientosRestantes();
         int nuevos = actuales - penalizacion;
-        if (nuevos < 0) nuevos = 0;
+        if (nuevos < 0)
+            nuevos = 0;
         controlador.getJuego().getJugador().setMovimientosRestantes(nuevos);
         panelJuego.actualizar();
         JOptionPane.showMessageDialog(dialogo,
                 "OBJETIVO\nEmpuja el paquete a todos los puertos en orden\nantes de quedarte sin movimientos.\n\n" +
                         "CONTROLES\n  W / ↑  Arriba\n  S / ↓  Abajo\n  A / ←  Izquierda\n  D / →  Derecha\n" +
                         "  E       Modo Sigilo\n  M       Pausa\n\n" +
-                        "AMENAZAS\n  Antivirus  — te elimina al tocarte\n  Escáner    — reduce tus movimientos\n  Firewall   — bloquea el paso\n\n" +
+                        "AMENAZAS\n  Antivirus  — te elimina al tocarte\n  Escáner    — reduce tus movimientos\n  Firewall   — bloquea el paso\n\n"
+                        +
                         "⚠ Penalización aplicada: -" + penalizacion + " movimientos",
                 "INSTRUCCIONES", JOptionPane.PLAIN_MESSAGE);
     }
@@ -209,12 +204,14 @@ public class VentanaPrincipal extends JFrame {
         if (controlador.getJuego().isOrdenInverso()) {
             for (int i = total; i >= 1; i--) {
                 orden += "P" + i;
-                if (i > 1) orden += " → ";
+                if (i > 1)
+                    orden += " → ";
             }
         } else {
             for (int i = 1; i <= total; i++) {
                 orden += "P" + i;
-                if (i < total) orden += " → ";
+                if (i < total)
+                    orden += " → ";
             }
         }
         JOptionPane.showMessageDialog(dialogo,

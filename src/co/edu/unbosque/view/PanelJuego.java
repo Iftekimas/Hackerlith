@@ -234,7 +234,6 @@ public class PanelJuego extends JPanel {
         }
 
         // Mensaje fin de juego
-        // Mensaje fin de juego
         if (juego.getEstado().equals(Juego.GANADO)) {
             g.setColor(new Color(0, 0, 0, 180));
             g.fillRect(0, 0, getWidth(), getHeight());
