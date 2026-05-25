@@ -11,7 +11,9 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 
 /**
- * Panel que dibuja el tablero, el jugador, las amenazas y el HUD durante la partida.
+ * Panel que dibuja el tablero, el jugador, las amenazas y el HUD durante la
+ * partida.
+ * 
  * @author Santiago Forero Garibello
  * @author Alejandra Fernandez Espinosa
  * @author Michael Andres Sanchez
@@ -49,8 +51,9 @@ public class PanelJuego extends JPanel {
 
     /**
      * Crea el panel de juego cargando las imágenes según el skin elegido.
-     * @param juego estado del juego a dibujar
-     * @param skin nombre del skin del personaje: MARCIANITO o TITA
+     * 
+     * @param juego   estado del juego a dibujar
+     * @param skin    nombre del skin del personaje: MARCIANITO o TITA
      * @param ventana referencia a la ventana principal para volver al menú
      */
     public PanelJuego(Juego juego, String skin, VentanaPrincipal ventana) {
@@ -118,9 +121,11 @@ public class PanelJuego extends JPanel {
         int gridH = filas * tamCelda;
 
         int offsetX = (getWidth() - gridW) / 2;
-        if (offsetX < 0) offsetX = 0;
+        if (offsetX < 0)
+            offsetX = 0;
         int offsetY = HUD_HEIGHT + (getHeight() - HUD_HEIGHT - gridH) / 2;
-        if (offsetY < HUD_HEIGHT) offsetY = HUD_HEIGHT;
+        if (offsetY < HUD_HEIGHT)
+            offsetY = HUD_HEIGHT;
 
         // Fondo negro
         g.setColor(Color.BLACK);

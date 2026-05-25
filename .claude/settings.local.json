@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(copy \"c:\\\\Users\\\\santi\\\\Desktop\\\\a\\\\universidad\\\\Visual\\\\Hackerlith\\\\Hackerlith\\\\src\\\\resources\\\\Partida\\\\Puerto_4.png\" \"c:\\\\Users\\\\santi\\\\Desktop\\\\a\\\\universidad\\\\Visual\\\\Hackerlith\\\\Hackerlith\\\\bin\\\\resources\\\\Partida\\\\Puerto_4.png\")",
-      "Bash(copy \"c:\\\\Users\\\\santi\\\\Desktop\\\\a\\\\universidad\\\\Visual\\\\Hackerlith\\\\Hackerlith\\\\src\\\\resources\\\\Partida\\\\Puerto_5.png\" \"c:\\\\Users\\\\santi\\\\Desktop\\\\a\\\\universidad\\\\Visual\\\\Hackerlith\\\\Hackerlith\\\\bin\\\\resources\\\\Partida\\\\Puerto_5.png\")"
-    ]
-  }
-}
